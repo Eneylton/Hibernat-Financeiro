@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="FluxoDIA" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0020a564-6ece-41f7-8f28-953b72916e2d">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="Financeiro" uuid="7e591bc1-eb3f-4c70-997a-c3bd51857e8e">
+		<queryString>
+			<![CDATA[SELECT
+        DAY(rec.data) AS dia,
+            rec.tipo AS tipo,
+            COUNT(rec.tipo) receitas
+    FROM
+        financeiro AS rec
+    WHERE
+        rec.tipo = '1'
+    GROUP BY dia]]>
+		</queryString>
+		<field name="dia" class="java.lang.Integer"/>
+		<field name="tipo" class="java.lang.Boolean">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="receitas" class="java.lang.Long"/>
+	</subDataset>
+	<subDataset name="despesas" uuid="0dcdbf75-94cd-4815-9c1c-7b7accb2adc6">
+		<queryString language="SQL">
+			<![CDATA[SELECT
+        DAY(rec.data) AS dia,
+            rec.tipo AS tipo,
+            COUNT(rec.tipo) receitas
+    FROM
+        financeiro AS rec
+    WHERE
+        rec.tipo = '0'
+    GROUP BY dia]]>
+		</queryString>
+		<field name="dia" class="java.lang.Integer"/>
+		<field name="tipo" class="java.lang.Boolean">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="receitas" class="java.lang.Long"/>
+	</subDataset>
+	<queryString>
+		<![CDATA[select * from financeiro as fin]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="30" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="196" splitType="Stretch">
+			<stackedBar3DChart>
+				<chart>
+					<reportElement x="0" y="0" width="555" height="196" uuid="8c3e7afc-42ae-4573-bc78-5382c6fd830f"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="despesas" uuid="db2c6398-bd2f-4e64-b00f-e9f0d7939c88"/>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["Receita"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{dia}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{receitas}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Despesas"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{dia}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{receitas}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<bar3DPlot>
+					<plot/>
+					<itemLabel/>
+					<categoryAxisFormat>
+						<axisFormat/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat/>
+					</valueAxisFormat>
+				</bar3DPlot>
+			</stackedBar3DChart>
+		</band>
+	</summary>
+</jasperReport>

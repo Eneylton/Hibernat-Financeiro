@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<div class="page-header -i navbar navbar-fixed-top">
+
+
+
+	<div class="page-header-inner">
+
+		<div class="page-logo">
+			<a href="index.html"> <img src="../resources/img/logo.png"
+				alt="logo" class="logo-default" />
+			</a>
+			<div class="menu-toggler sidebar-toggler hide"></div>
+		</div>
+
+		<ul class="nav navbar-nav"
+			style="background-color: #3dbfbf; margin-top: -3px">
+			<li class="classic-menu-dropdown active"><a href="index.html">
+					<i class="fa fa-home" style="color: #fff"></i> <span
+					style="margin-left: 5px; color: #fff;">Home</span> <span
+					class="selected"> </span>
+			</a></li>
+
+		</ul>
+
+
+
+		<a href="javascript:;" class="menu-toggler responsive-toggler"
+			data-toggle="collapse" data-target=".navbar-collapse"> </a>
+
+		<div class="top-menu">
+			<ul class="nav navbar-nav pull-right">
+
+
+				<li class="dropdown dropdown-extended dropdown-inbox"
+					id="header_inbox_bar"></li>
+
+				<li class="dropdown dropdown-user"><a href="javascript:;"
+					class="dropdown-toggle" data-toggle="dropdown"> <span
+						class="username username-hide-on-mobile">
+							#{layoutPadraoBean.nomeUsuarioLogado}</span> <i class="fa fa-angle-down"></i>
+				</a>
+					<ul class="dropdown-menu dropdown-menu-default">
+
+						<li><a href="#"> <img style="width: 175px; height: 70px"
+								src="../resources/img/#{layoutPadraoBean.empresaImg}" alt="logo"
+								class="logo-default" /></a></li>
+
+						<li><a href="#"> <i class="icon-calendar"></i>#{layoutPadraoBean.empresaLog}
+						</a></li>
+
+
+
+						<li><a href="../usuario/AlterarSenhaUsuario.xhtml"> <i
+								class="icon-refresh"></i>Alterar Senha
+						</a></li>
+
+					</ul></li>
+
+				<li class="dropdown dropdown-quick-sidebar-toggler"><a
+					href="../usuario/Logout.xhtml" class="dropdown-toggle"> <i
+						class="icon-logout"></i>
+				</a></li>
+
+			</ul>
+		</div>
+
+	</div>
+
+</div>
+
+</html>

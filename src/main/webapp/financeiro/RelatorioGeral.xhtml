@@ -1,0 +1,286 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui"
+	template="/templates/Layout.xhtml">
+
+	<ui:define name="content">
+
+		<h:form id="frm" prependId="false">
+
+
+
+			<h3 class="page-title">
+				<h:graphicImage value="../resources/img/fluxo-de-caixa.png"
+					style="width:30px; height:29px" />
+				Relatório Geral
+			</h3>
+
+			<div class="clearfix"></div>
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+
+					<div class="portlet light ">
+						<div class="portlet-title">
+
+							<p:messages id="msgs" closable="true">
+								<p:effect type="pulsate" event="load" delay="500" />
+							</p:messages>
+
+
+							<div class="col-lg-12">
+								<div class="portlet">
+									<div class="portlet-title">
+
+
+										<p:toolbar id="toolbar"
+											style="margin-top: 20px; background-color:#fff;">
+											<p:toolbarGroup align="left">
+
+												<p:panelGrid columns="4" styleClass="semBorda">
+													<p:outputLabel value="Início" />
+													<p:calendar
+														value="#{relatorioGeralBean.financeiro.dataInicio}"
+														locale="pt" required="true" pattern="dd/MM/yyyy" />
+
+													<p:outputLabel value="Fim" />
+													<p:calendar
+														value="#{relatorioGeralBean.financeiro.dataFim}"
+														locale="pt" required="true" pattern="dd/MM/yyyy" />
+
+													<p:outputLabel value="Pagemanto Realizado" />
+
+
+													<p:selectOneButton styleClass="bg-grey-cascade"
+														value="#{relatorioGeralBean.financeiro.status}">
+														<f:selectItem itemLabel="Sim" itemValue="true" />
+														<f:selectItem itemLabel="Não" itemValue="false" />
+													</p:selectOneButton>
+
+													<p:outputLabel value="Tipo" />
+
+													<p:selectOneButton styleClass="bg-grey-gallery"
+														value="#{relatorioGeralBean.financeiro.tipo}">
+														<f:selectItem itemLabel="Receita" itemValue="true" />
+														<f:selectItem itemLabel="Despesa" itemValue="false" />
+													</p:selectOneButton>
+
+
+													<p:outputLabel value="Destino:" />
+
+													<p:selectOneMenu id="desttino"
+														styleClass="bs-select form-control" rendered="true"
+														value="#{relatorioGeralBean.financeiro.destino}">
+														<f:selectItem itemLabel="Selecione o Destino" itemValue="" />
+														<f:selectItem itemLabel="1 - Empresa" itemValue="false" />
+														<f:selectItem itemLabel="2 - Agencia Bancaria"
+															itemValue="true" />
+													</p:selectOneMenu>
+													
+													
+
+												</p:panelGrid>
+												<br />
+
+												
+											</p:toolbarGroup>
+
+											<p:toolbarGroup align="right">
+											
+											<p:commandButton value="Pesquisar" icon="fa fa-search"
+													action="#{relatorioGeralBean.consultaGeral}"
+													styleClass="btn blue" update=":frm:msgs" ajax="false" />
+													
+													<span class="ui-separator"> <span
+													class="ui-icon ui-icon-grip-dotted-vertical" />
+												</span>
+													
+
+												<p:commandButton ajax="false" icon="fa fa-upload"
+												    value="Relatório"
+													immediate="true" process="@this"
+													onclick="this.form.target='_blank'"
+													action="#{relatorioGeralBean.relatorioGeral}"
+													styleClass="btn green" />
+
+
+											</p:toolbarGroup>
+
+
+										</p:toolbar>
+
+									</div>
+								</div>
+							</div>
+
+							<div class="col-lg-12">
+
+								<p:dataTable value="#{relatorioGeralBean.listarFinanceiros}"
+									var="relatorioGeral" widgetVar="relatorioGeralTable"
+									reflow="true" emptyMessage="Nenhum Arquivo Cadastrado...."
+									rows="10" paginator="true" paginatorPosition="bottom"
+									style="margin-top: 10px" id="relatorioGeralTable"
+									selection="#{relatorioGeralBean.relatorioGeralSelecionado}"
+									selectionMode="single" rowKey="#{relatorioGeral.id}"
+									rowsPerPageTemplate="30,50,100">
+
+									<p:ajax event="rowSelect" update=":frm:toolbar" />
+									<p:ajax event="rowUnselect" update=":frm:toolbar" />
+
+									<p:column headerText="@" style="width:3px; text-align:center;">
+										<h:graphicImage value="../resources/img/despesa.png"
+											rendered="#{relatorioGeral.tipo eq 'false'}" />
+										<h:graphicImage value="../resources/img/receita.png"
+											rendered="#{relatorioGeral.tipo eq 'true'}" />
+
+									</p:column>
+
+
+
+									<p:column headerText="Vencimento"
+										filterBy="#{relatorioGeral.data}"
+										filterable="relatorioGeral.data"
+										style="width:60px; text-align:center;">
+										<i class="fa fa-calendar" />
+										<p:spacer style="margin-left:10px;" />
+										<h:outputText value="#{relatorioGeral.data}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputText>
+
+									</p:column>
+
+									<p:column exportable="false" headerText="Situação"
+										style="width:48px; text-align:left;">
+
+										<h:outputText styleClass="label label-sm label-primary circle"
+											value="PAGO" style="color:#fff"
+											rendered="#{relatorioGeral.status eq 'true'}" />
+
+										<h:outputText styleClass="label label-sm label-danger circle"
+											style="color:#fff" value="EM ABERTO "
+											rendered="#{relatorioGeral.status eq 'false'}" />
+
+
+									</p:column>
+									<p:column headerText="Cliente"
+										filterBy="#{relatorioGeral.aluno.nome}"
+										filterable="#{relatorioGeral.aluno.nome}" style="width:40px; ">
+
+
+
+										<h:outputLabel value="#{relatorioGeral.aluno.nome}" />
+									</p:column>
+
+
+									<p:column headerText="Categoria"
+										filterBy="#{relatorioGeral.categoriaFinanceiro.descricao}"
+										filterable="#{relatorioGeral.categoriaFinanceiro.descricao}"
+										style="width:55px;">
+
+
+										<h:outputLabel
+											value="#{relatorioGeral.categoriaFinanceiro.descricao}" />
+									</p:column>
+
+
+									<p:column headerText="Previsão" style="width:100px;">
+
+
+										<h:outputText value="Dia do pagamento..."
+											rendered="#{relatorioGeral.previsao eq '0'}"
+											styleClass="label label-sm label-success circle" />
+
+
+
+										<h:outputText value="A um dia do pagamento..."
+											rendered="#{relatorioGeral.previsao eq '1'}"
+											styleClass="label label-sm label-info circle" />
+
+
+
+										<h:outputText value="A dois dias do pagamento..."
+											rendered="#{relatorioGeral.previsao eq '2'}"
+											styleClass="label label-sm label-warning circle" />
+
+
+										<h:outputText value="A três dias do pagamento..."
+											rendered="#{relatorioGeral.previsao eq '3'}"
+											styleClass="label label-sm label-warning circle" />
+
+
+
+										<h:outputText value="A Quatro dias do pagamento..."
+											rendered="#{relatorioGeral.previsao eq '4'}"
+											styleClass="label label-sm label-warning circle" />
+
+										<h:outputText style="color:#000"
+											value="A cinco dias do pagamento..."
+											rendered="#{relatorioGeral.previsao eq '5'}"
+											styleClass="label label-sm label-default circle" />
+
+										<h:outputText value="Aguardando pagamento..."
+											rendered="#{relatorioGeral.previsao eq '6'}"
+											styleClass="label label-sm label-primary circle" />
+
+
+										<h:outputText value="Pagamento atrasado..."
+											rendered="#{relatorioGeral.previsao eq '7'}"
+											styleClass="label label-sm label-danger circle" />
+
+									</p:column>
+
+
+
+									<p:column headerText="Valor" style="width:42px;  ">
+
+
+										<h:outputLabel value="#{relatorioGeral.valor}"
+											style="font-weight:normal;color:#666"
+											rendered="#{relatorioGeral.tipo eq 'true'}">
+											<f:convertNumber type="currency" minFractionDigits="2" />
+										</h:outputLabel>
+
+										<h:outputLabel value="#{relatorioGeral.valor}"
+											style="font-weight:normal; color:#ff0000"
+											rendered="#{relatorioGeral.tipo eq 'false'}">
+											<f:convertNumber type="currency" minFractionDigits="2" />
+										</h:outputLabel>
+									</p:column>
+
+
+									<p:columnGroup type="footer">
+										<p:row>
+											<p:column colspan="6" footerText="Valor Total:"
+												style="text-align:right; " />
+
+											<p:column colspan="1" footerText="R$"
+												style="text-align:left; ">
+
+												<f:facet name="footer">
+													<h:outputText value="#{relatorioGeralBean.total}"
+														style="text-align:left">
+														<f:convertNumber type="currency" />
+													</h:outputText>
+												</f:facet>
+
+
+											</p:column>
+										</p:row>
+									</p:columnGroup>
+								</p:dataTable>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+		</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>

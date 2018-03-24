@@ -1,0 +1,194 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui"
+	template="/templates/Layout.xhtml">
+
+	<ui:define name="content">
+
+		<h:form id="frm" prependId="false">
+
+			<h:inputHidden id="id" value="#{categoriaFinanceiroBean.categoriaFinanceiro.id}" readonly="true" />
+
+
+			<h3 class="page-title">
+				<i class="fa fa-gg" style="color: #1caf9a; font-size: 23px" /> Categoria
+			</h3>
+
+			<div class="clearfix"></div>
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+
+					<div class="portlet light ">
+						<div class="portlet-title">
+
+							<p:messages id="msgs" closable="true">
+								<p:effect type="pulsate" event="load" delay="500" />
+							</p:messages>
+
+
+
+							<div class="portlet">
+								<div class="portlet-title">
+
+
+									<p:toolbar id="toolbar"
+										style="margin-top: 20px; background-color:#fff;">
+										<p:toolbarGroup align="left">
+
+											<p:commandButton value="Novo" icon="fa fa-plus" id="btn1"
+												styleClass="btn blue-madison"
+												action="#{categoriaFinanceiroBean.prepararNovoCadastro}" process="@this"
+												update="formulario-dialog"
+												oncomplete="PF('edicaoDialog').show()">
+
+
+												<p:resetInput target="formulario-dialog" />
+
+
+											</p:commandButton>
+
+
+											<span class="ui-separator"> <span
+												class="ui-icon ui-icon-grip-dotted-vertical" />
+											</span>
+
+
+											<p:commandButton icon="fa fa-pencil" title="Editar"
+												value="Editar" styleClass="btn blue-hoki" id="btn2"
+												process="@this" update="formulario-dialog"
+												oncomplete="PF('edicaoDialog').show()"
+												disabled="#{categoriaFinanceiroBean.categoriaFinanceiroSelecionada == null}">
+
+
+												<p:resetInput target="formulario-dialog" />
+
+												<f:setPropertyActionListener
+													value="#{categoriaFinanceiroBean.categoriaFinanceiroSelecionada}"
+													target="#{categoriaFinanceiroBean.categoriaFinanceiroEdicao}" />
+											</p:commandButton>
+
+
+											<p:spacer style="margin-left:10px" />
+
+											<p:commandButton icon="fa fa-trash" title="Excluir"
+												value="Excluir" id="btn3" process="@this"
+												styleClass="btn red-sunglo"
+												update=":frm:categoriaFinanceiroTable :frm:msgs :frm:toolbar"
+												action="#{categoriaFinanceiroBean.excluir}"
+												disabled="#{categoriaFinanceiroBean.categoriaFinanceiroSelecionada == null}">
+
+
+
+												<p:confirm icon="ui-icon-alert"
+													header="Confirmação de exclusão"
+													message="Tem Certeza que Deseja Excluir esse categoriaFinanceiro ?" />
+
+											</p:commandButton>
+
+										</p:toolbarGroup>
+
+									</p:toolbar>
+
+								</div>
+							</div>
+
+
+							<p:dataTable value="#{categoriaFinanceiroBean.listarCategoriaFinanceiros}" var="categoriaFinanceiro"
+								widgetVar="categoriaFinanceiroTable" reflow="true"
+								emptyMessage="Nenhum Arquivo Cadastrado...." rows="10"
+								paginator="true" paginatorPosition="bottom"
+								style="margin-top: 10px" id="categoriaFinanceiroTable"
+								selection="#{categoriaFinanceiroBean.categoriaFinanceiroSelecionada}" selectionMode="single"
+								rowKey="#{categoriaFinanceiro.id}">
+
+								<f:facet name="header">
+									<p:outputPanel>
+										<p:spacer style="margin:15px 0px;" />
+
+										<p:inputText id="globalFilter" style="width:350px"
+											onkeyup="PF('categoriaFinanceiroTable').filter()" placeholder="Pesquisar" />
+									</p:outputPanel>
+								</f:facet>
+
+								<p:ajax event="rowSelect" update=":frm:toolbar" />
+								<p:ajax event="rowUnselect" update=":frm:toolbar" />
+
+								<p:column headerText="Código"
+									style="width:50px; text-align:center;">
+									<i class="fa fa-circle-o text-blue"></i>
+									<p:spacer style="width:10px;" />
+									<h:outputText value="#{categoriaFinanceiro.id}" />
+								</p:column>
+
+								<p:column style="width:200px; text-align:left;"
+									headerText="categoriaFinanceiros" priority="4" filterBy="#{categoriaFinanceiro.descricao}">
+									<i class="fa  fa-user" style="color: #3c8dbc" />
+									<p:spacer style="width:10px;" />
+									<h:outputText value="#{categoriaFinanceiro.descricao}" />
+								</p:column>
+
+							</p:dataTable>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<p:dialog header="Nova Categoria" widgetVar="edicaoDialog"
+				styleClass="modal-header" showEffect="explode" hideEffect="explode"
+				id="formulario-dialog" resizable="false" modal="true"
+				closeOnEscape="true">
+
+				<p:messages id="msgs-dialog" closable="true">
+					<p:effect type="pulsate" event="load" delay="500" />
+				</p:messages>
+				<p:defaultCommand target="salvar-button" scope="formulario-dialog" />
+
+				<hr />
+
+				<p:panelGrid columns="2" styleClass="semBorda" id="painel-dialog">
+
+
+					<p:outputLabel value="Categoria" />
+
+					<p:inputText id="serv" maxlength="80" style="width:250px"
+						styleClass="form-control" value="#{categoriaFinanceiroBean.categoriaFinanceiroEdicao.descricao}"
+						required="true" />
+
+					<br />
+
+				</p:panelGrid>
+
+				<div style="margin-left: 10px;">
+
+					<p:commandButton value="Salvar" id="salvar-button"
+						icon="fa fa-check" action="#{categoriaFinanceiroBean.salvar}"
+						styleClass="btn blue" process="formulario-dialog"
+						update=":frm:categoriaFinanceiroTable :frm:msgs"
+						oncomplete="if (!args.validationFailed) PF('edicaoDialog').hide()" />
+
+				</div>
+			</p:dialog>
+
+
+		</h:form>
+
+		<h:form>
+			<p:confirmDialog global="true">
+
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no btn btn-sm red" icon="fa fa-times" />
+
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes btn btn-sm default"
+					icon="fa fa-check" />
+			</p:confirmDialog>
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

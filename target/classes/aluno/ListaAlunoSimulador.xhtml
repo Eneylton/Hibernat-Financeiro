@@ -1,0 +1,232 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui"
+	template="/templates/Layout.xhtml">
+
+	<ui:define name="content">
+
+		<h:form id="frm" prependId="false">
+
+			<h:inputHidden id="id" readonly="true" />
+
+
+			<h3 class="page-title">
+				<i class="fa fa-gg" style="color: #1caf9a; font-size: 23px" />
+				Simulador Automotivo
+			</h3>
+
+			<div class="clearfix"></div>
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+
+					<div class="portlet light ">
+						<div class="portlet-title">
+
+							<p:messages id="msgs" closable="true">
+								<p:effect type="pulsate" event="load" delay="500" />
+							</p:messages>
+
+
+
+							<div class="portlet">
+								<div class="portlet-title">
+
+
+									<p:toolbar id="toolbar"
+										style="margin-top: 20px; background-color:#fff;">
+										<p:toolbarGroup align="left">
+
+
+											<p:button ajax="false" value="Imprimir horários"
+												icon="fa fa-print" 
+												id="btn1" styleClass="btn blue-madison" />
+
+
+										</p:toolbarGroup>
+
+										<p:toolbarGroup align="right">
+
+
+											<p:button ajax="false" icon="fa fa-user" value="Alunos"
+											  outcome="../aluno/Aluno.xhtml"
+												styleClass="btn btn-sm green" />
+
+										</p:toolbarGroup>
+
+									</p:toolbar>
+
+								</div>
+							</div>
+
+
+
+
+							<p:dataTable value="#{pesquisaSimuladorBean.agendas}" var="aluno"
+								widgetVar="cadAgendaTable" reflow="true"
+								emptyMessage="Nenhum Arquivo Cadastrado...." rows="6"
+								paginator="true" paginatorPosition="bottom"
+								style="margin-top: 10px" id="cadAgenda"
+								selection="#{pesquisaSimuladorBean.agendaSelecionada}"
+								selectionMode="single" rowKey="#{aluno.id}">
+
+								<f:facet name="header">
+									<p:outputPanel>
+										<p:spacer style="margin:15px 0px;" />
+
+										<p:inputText id="globalFilter" style="width:350px"
+											onkeyup="PF('cadAgendaTable').filter()"
+											placeholder="Pesquisar" />
+									</p:outputPanel>
+								</f:facet>
+
+								<p:ajax event="rowSelect" update=":frm:toolbar" />
+								<p:ajax event="rowUnselect" update=":frm:toolbar" />
+
+								<p:column headerText="Código"
+									style="width:10px; text-align:center;">
+									<i class="fa fa-circle-o text-blue"></i>
+									<p:spacer style="width:10px;" />
+									<h:outputText value="#{aluno.id}" />
+								</p:column>
+
+
+								<p:column headerText="Alunos" filterBy="#{aluno.aluno.nome}"
+									style="width:60px;">
+									<i class="fa fa-user"></i>
+									<p:spacer style="width:10px;" />
+									<h:outputText value="#{aluno.aluno.nome}" />
+								</p:column>
+
+								<p:column headerText="Data" filterBy="#{aluno.inicio}"
+									style="width:40px;">
+									<i class="fa fa-calendar"></i>
+									<p:spacer style="width:10px;" />
+
+									<h:outputText value="#{aluno.inicio}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputText>
+
+								</p:column>
+
+								<p:column headerText="Início" filterBy="#{aluno.inicio}"
+									style="width:30px;">
+									<i class="fa fa-clock-o"></i>
+									<p:spacer style="width:10px;" />
+
+									<h:outputText value="#{aluno.inicio}">
+										<f:convertDateTime pattern="HH:mm" />
+									</h:outputText>
+
+								</p:column>
+
+								<p:column headerText="Fim" filterBy="#{aluno.fim}"
+									style="width:30px;">
+									<i class="fa fa-clock-o"></i>
+									<p:spacer style="width:10px;" />
+
+									<h:outputText value="#{aluno.fim}">
+										<f:convertDateTime pattern="HH:mm" />
+									</h:outputText>
+
+								</p:column>
+
+
+								<p:column headerText="Prvisão" style="width:70px;">
+
+
+									<h:outputText value="Dia da avaliação..."
+										rendered="#{aluno.previsao eq '0'}"
+										styleClass="label label-sm label-success circle" />
+
+
+
+									<h:outputText value="Falta um dia para avaliação..."
+										rendered="#{aluno.previsao eq '1'}"
+										styleClass="label label-sm label-primary circle" />
+
+
+
+
+									<h:outputText value="Dois dias para avaliação..."
+										rendered="#{aluno.previsao eq '2'}"
+										styleClass="label label-sm label-warning circle" />
+
+
+									<h:outputText value="Três dias para avaliação..."
+										rendered="#{aluno.previsao eq '3'}"
+										styleClass="label label-sm label-warning circle" />
+
+
+
+									<h:outputText value="Quatro dias para avaliação..."
+										rendered="#{aluno.previsao eq '4'}"
+										styleClass="label label-sm label-info circle" />
+
+									<h:outputText value="Cinco dias para avaliação..."
+										rendered="#{aluno.previsao eq '5'}"
+										styleClass="label label-sm label-info circle" />
+
+									<h:outputText value="Aguardando..."
+										rendered="#{aluno.previsao eq '6'}"
+										styleClass="label label-sm label-primary circle" />
+										
+											<h:outputText value="Data expirada..."
+										rendered="#{aluno.previsao eq '7'}"
+										styleClass="label label-sm label-danger circle" />
+
+								</p:column>
+
+
+
+								<p:column style="width:30px; text-align:center;"
+									headerText="Agendar">
+
+									<p:button styleClass="btn btn-xs purple" type="button"
+										icon="fa fa-calendar" title="Teste Avaliação"
+										outcome="../agenda/AgendaSimulador.xhtml">
+
+										<f:param name="aluno" value="#{aluno.aluno.id}" />
+
+									</p:button>
+
+
+
+								</p:column>
+
+								<p:column style="width:30px; text-align:center;"
+									headerText="Email">
+
+									<p:button styleClass="btn btn-xs green meadow" type="button"
+										icon="fa fa-envelope" title="Teste Avaliação">
+
+										<f:param name="aluno" value="#{aluno.aluno.id}" />
+
+									</p:button>
+
+
+
+								</p:column>
+
+
+
+
+							</p:dataTable>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+
+
+		</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>

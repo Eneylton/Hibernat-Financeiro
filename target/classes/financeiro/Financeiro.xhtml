@@ -1,0 +1,485 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui"
+	template="/templates/Layout.xhtml">
+
+	<ui:define name="content">
+
+		<h:form id="frm" prependId="false">
+
+			<h:inputHidden id="id" value="#{financeiroBean.financeiro.id}"
+				readonly="true" />
+
+
+			<h3 class="page-title">
+				<h:graphicImage value="../resources/img/fluxo-de-caixa.png"
+					style="width:30px; height:29px" />
+				Lançamentos
+			</h3>
+
+			<div class="clearfix"></div>
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+
+					<div class="portlet light ">
+						<div class="portlet-title">
+
+							<p:messages id="msgs" closable="true">
+								<p:effect type="pulsate" event="load" delay="500" />
+							</p:messages>
+
+
+							<div class="col-lg-8">
+								<div class="portlet">
+									<div class="portlet-title">
+
+
+										<p:toolbar id="toolbar"
+											style="margin-top: 20px; background-color:#fff;">
+											<p:toolbarGroup align="left">
+
+												<p:commandButton value="Novo Lançamento" icon="fa fa-plus"
+													id="btn1" styleClass="btn blue-madison"
+													action="#{financeiroBean.prepararNovoCadastro}"
+													process="@this" update="formulario-dialog"
+													oncomplete="PF('edicaoDialog').show()">
+
+
+													<p:resetInput target="formulario-dialog" />
+
+
+												</p:commandButton>
+
+
+												<span class="ui-separator"> <span
+													class="ui-icon ui-icon-grip-dotted-vertical" />
+												</span>
+
+
+												<p:commandButton icon="fa fa-refresh" title="Baixar"
+													value="Atualizar Pagamento" styleClass="btn blue-hoki"
+													id="btn2" process="@this" update="formulario-dialog"
+													oncomplete="PF('edicaoDialog').show()"
+													disabled="#{financeiroBean.financeiroSelecionada == null}">
+
+
+													<p:resetInput target="formulario-dialog" />
+
+													<f:setPropertyActionListener
+														value="#{financeiroBean.financeiroSelecionada}"
+														target="#{financeiroBean.financeiroEdicao}" />
+												</p:commandButton>
+
+												<span class="ui-separator"> <span
+													class="ui-icon ui-icon-grip-dotted-vertical" />
+												</span>
+
+
+												<p:commandButton ajax="false" icon="fa fa-upload"
+													immediate="true" process="@this"
+													action="#{financeiroBean.faturamentoPDF}"
+													styleClass="btn green" onclick="this.form.target='_blank'" />
+
+
+												<span class="ui-separator"> <span
+													class="ui-icon ui-icon-grip-dotted-vertical" />
+												</span>
+
+												<p:commandButton icon="fa fa-trash" title="Excluir"
+													id="btn3" process="@this" styleClass="btn red-sunglo"
+													update=":frm:financeiroTable :frm:msgs :frm:toolbar"
+													action="#{financeiroBean.excluir}"
+													disabled="#{financeiroBean.financeiroSelecionada == null}">
+
+
+
+													<p:confirm icon="ui-icon-alert"
+														header="Confirmação de exclusão"
+														message="Tem Certeza que Deseja Excluir esse financeiro ?" />
+
+												</p:commandButton>
+
+
+
+											</p:toolbarGroup>
+
+
+										</p:toolbar>
+
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="dashboard-stat blue-steel">
+									<div class="visual">
+										<i class="fa fa-barcode"></i>
+									</div>
+									<div class="details">
+										<div class="number">
+
+											<p:outputLabel id="total"
+												value="#{financeiroBean.movimentacaoBancaria}">
+
+												<f:convertNumber type="currency" />
+
+											</p:outputLabel>
+										</div>
+										<div class="desc">
+											<span style="color: #cff501;">Movimentações Bacárias</span>
+										</div>
+									</div>
+									<a class="more" href="../financeiro/FluxoDeCaixa.xhtml"> Mais Detalhes<i
+										class="m-icon-swapright m-icon-white"></i>
+									</a>
+								</div>
+
+
+							</div>
+							<div class="col-lg-12">
+
+								<p:dataTable value="#{financeiroBean.listarFinanceiros}"
+									var="financeiro" widgetVar="financeiroTable" reflow="true"
+									emptyMessage="Nenhum Arquivo Cadastrado...." rows="10"
+									paginator="true" paginatorPosition="bottom"
+									style="margin-top: 10px" id="financeiroTable"
+									selection="#{financeiroBean.financeiroSelecionada}"
+									selectionMode="single" rowKey="#{financeiro.id}"
+									rowsPerPageTemplate="30,50,100">
+
+									<f:facet name="header">
+										<p:outputPanel>
+											<p:spacer style="margin:15px 0px;" />
+
+											<p:inputText id="globalFilter" style="width:350px"
+												onkeyup="PF('financeiroTable').filter()"
+												placeholder="Pesquisar" />
+										</p:outputPanel>
+									</f:facet>
+
+									<p:ajax event="rowSelect" update=":frm:toolbar" />
+									<p:ajax event="rowUnselect" update=":frm:toolbar" />
+
+									<p:column headerText="@" style="width:3px; text-align:center;">
+										<h:graphicImage value="../resources/img/despesa.png"
+											rendered="#{financeiro.tipo eq 'false'}" />
+										<h:graphicImage value="../resources/img/receita.png"
+											rendered="#{financeiro.tipo eq 'true'}" />
+
+									</p:column>
+
+
+
+									<p:column headerText="Vencimento" filterBy="#{financeiro.data}"
+										filterable="financeiro.data"
+										style="width:60px; text-align:center;">
+										<i class="fa fa-calendar" />
+										<p:spacer style="margin-left:10px;" />
+										<h:outputText value="#{financeiro.data}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputText>
+
+									</p:column>
+
+									<p:column exportable="false" headerText="Situação"
+										style="width:48px; text-align:left;">
+
+										<h:outputText styleClass="label label-sm label-primary circle"
+											value="PAGO" style="color:#fff"
+											rendered="#{financeiro.status eq 'true'}" />
+
+										<h:outputText styleClass="label label-sm label-danger circle"
+											style="color:#fff" value="EM ABERTO "
+											rendered="#{financeiro.status eq 'false'}" />
+
+
+									</p:column>
+									<p:column headerText="Cliente"
+										filterBy="#{financeiro.aluno.nome}"
+										filterable="#{financeiro.aluno.nome}" style="width:40px; ">
+
+
+
+										<h:outputLabel value="#{financeiro.aluno.nome}" />
+									</p:column>
+
+
+									<p:column headerText="Categoria"
+										filterBy="#{financeiro.categoriaFinanceiro.descricao}"
+										filterable="#{financeiro.categoriaFinanceiro.descricao}"
+										style="width:55px;">
+
+
+										<h:outputLabel
+											value="#{financeiro.categoriaFinanceiro.descricao}" />
+									</p:column>
+
+
+									<p:column headerText="Previsão" style="width:80px;">
+
+
+										<h:outputText value="Dia do pagamento..."
+											rendered="#{financeiro.previsao eq '0'}"
+											styleClass="label label-sm label-success circle" />
+
+
+
+										<h:outputText value="A um dia do pagamento..."
+											rendered="#{financeiro.previsao eq '1'}"
+											styleClass="label label-sm label-info circle" />
+
+
+
+										<h:outputText value="A dois dias do pagamento..."
+											rendered="#{financeiro.previsao eq '2'}"
+											styleClass="label label-sm label-warning circle" />
+
+
+										<h:outputText value="A três dias do pagamento..."
+											rendered="#{financeiro.previsao eq '3'}"
+											styleClass="label label-sm label-warning circle" />
+
+
+
+										<h:outputText value="A Quatro dias do pagamento..."
+											rendered="#{financeiro.previsao eq '4'}"
+											styleClass="label label-sm label-warning circle" />
+
+										<h:outputText style="color:#000"
+											value="A cinco dias do pagamento..."
+											rendered="#{financeiro.previsao eq '5'}"
+											styleClass="label label-sm label-default circle" />
+
+										<h:outputText value="Aguardando pagamento..."
+											rendered="#{financeiro.previsao eq '6'}"
+											styleClass="label label-sm label-primary circle" />
+
+
+										<h:outputText value="Pagamento atrasado..."
+											rendered="#{financeiro.previsao eq '7'}"
+											styleClass="label label-sm label-danger circle" />
+
+									</p:column>
+
+
+
+									<p:column headerText="Valor" style="width:42px;  ">
+
+
+										<h:outputLabel value="#{financeiro.valor}"
+											style="font-weight:normal;color:#666"
+											rendered="#{financeiro.tipo eq 'true'}">
+											<f:convertNumber type="currency" minFractionDigits="2" />
+										</h:outputLabel>
+
+										<h:outputLabel value="#{financeiro.valor}"
+											style="font-weight:normal; color:#ff0000"
+											rendered="#{financeiro.tipo eq 'false'}">
+											<f:convertNumber type="currency" minFractionDigits="2" />
+										</h:outputLabel>
+									</p:column>
+
+
+									<p:column headerText="Recibo" exportable="false"
+										style="width:30px; text-align:center;">
+
+										<p:commandButton icon="fa fa-file-text-o" process="@this"
+											rendered="#{ financeiro.status eq 'true'}" ajax="false"
+											immediate="true" onclick="this.form.target='_blank'"
+											styleClass="btn btn-sm blue-steel"
+											action="#{financeiroBean.imprirRecibo}" title="Recibo">
+											<f:setPropertyActionListener value="#{financeiro}"
+												target="#{financeiroBean.financeiroSelecionada}" />
+										</p:commandButton>
+
+
+										<p:commandButton icon="fa fa-file-text-o" process="@this"
+											rendered="#{financeiro.status eq 'false'}" ajax="false"
+											disabled="true" immediate="true"
+											onclick="this.form.target='_blank'"
+											styleClass="btn btn-sm blue-steel"
+											action="#{financeiroBean.imprirRecibo}" title="Recibo">
+											<f:setPropertyActionListener value="#{financeiro}"
+												target="#{financeiroBean.financeiroSelecionada}" />
+										</p:commandButton>
+
+
+
+									</p:column>
+
+									<p:columnGroup type="footer">
+										<p:row>
+											<p:column colspan="4" footerText="Valor das Despesas:"
+												style="text-align:right; " />
+
+
+											<p:column style="text-align:left">
+												<f:facet name="footer">
+													<h:outputText styleClass="label label-sm label-danger"
+														value="#{financeiroBean.despesasEmpresa}">
+														<f:convertNumber type="currency" />
+													</h:outputText>
+
+
+												</f:facet>
+											</p:column>
+
+											<p:column footerText="Faturamento:"
+												style="text-align:right; " />
+
+											<p:column style="text-align:left">
+												<f:facet name="footer">
+													<h:outputText style="color:#fff"
+														styleClass="label label-sm label-info"
+														value="#{financeiroBean.lancamento}">
+														<f:convertNumber type="currency" />
+													</h:outputText>
+
+												</f:facet>
+											</p:column>
+											<p:column />
+
+
+										</p:row>
+									</p:columnGroup>
+
+								</p:dataTable>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<p:dialog positionType="center"
+				header="#{financeiroBean.editando ? 'Baixar Pagamento' : 'Lançamento'}"
+				widgetVar="edicaoDialog" styleClass="modal-header"
+				showEffect="explode" hideEffect="explode" id="formulario-dialog"
+				resizable="false" modal="true" closeOnEscape="true">
+
+				<p:messages id="msgs-dialog" closable="true">
+					<p:effect type="pulsate" event="load" delay="500" />
+				</p:messages>
+				<p:defaultCommand target="salvar-button" scope="formulario-dialog" />
+
+				<hr />
+
+				<p:panelGrid columns="4" styleClass="semBorda" id="painel-dialog">
+
+					<p:outputLabel value="Categoria"
+						rendered="#{financeiroBean.ocultarInput}" />
+
+					<p:selectOneMenu id="cat" style="width:100%;" filter="true"
+						styleClass="form-control"
+						rendered="#{financeiroBean.ocultarInput}" required="true"
+						converter="omnifaces.SelectItemsConverter"
+						value="#{financeiroBean.financeiroEdicao.categoriaFinanceiro}">
+						<f:selectItem itemLabel="Selecione uma Categoria" />
+						<f:selectItems value="#{financeiroBean.listarCategorias}"
+							var="var" itemLabel="#{var.descricao}" itemValue="#{var}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Valor" />
+
+					<p:inputText id="valor" size="60" maxlength="80"
+						style="width:192px" styleClass="form-control"
+						onkeydown="mascara(this,moeda)"
+						value="#{financeiroBean.financeiroEdicao.valor}" required="true">
+						<f:convertNumber minFractionDigits="2" maxIntegerDigits="10" />
+
+
+
+					</p:inputText>
+
+					<p:outputLabel value="Forma de Pagamento" />
+
+					<p:selectOneMenu required="true" id="frmpg" style="width:147px"
+						converter="omnifaces.SelectItemsConverter"
+						styleClass="form-control select2"
+						value="#{financeiroBean.financeiroEdicao.formaPagamento}">
+						<f:selectItem itemLabel="Selecione a Forma de Pagamento" />
+						<f:selectItems value="#{alunoFinanceiroBean.listarFormaPagamento}"
+							var="var" itemLabel="#{var.descricao}" itemValue="#{var}" />
+					</p:selectOneMenu>
+
+
+					<p:outputLabel value="Pagemanto Realizado" />
+
+
+					<p:selectOneButton styleClass="btn btn-sm default"
+						value="#{financeiroBean.financeiroEdicao.status}">
+						<f:selectItem itemLabel="Sim" itemValue="true" />
+						<f:selectItem itemLabel="Não" itemValue="false" />
+					</p:selectOneButton>
+
+					<p:outputLabel value="Data do Pagamento"
+						rendered="#{financeiroBean.ocultarInput}" />
+
+					<p:calendar id="calendario" label="Data"
+						value="#{financeiroBean.financeiroEdicao.data}"
+						mindate="#{financeiroBean.currentDate}"
+						rendered="#{financeiroBean.ocultarInput}" locale="pt"
+						required="true" pattern="dd/MM/yyyy">
+
+					</p:calendar>
+
+					<p:outputLabel value="Tipo" />
+
+					<p:selectOneButton styleClass="btn btn-sm default"
+						value="#{financeiroBean.financeiroEdicao.tipo}">
+						<f:selectItem itemLabel="Receita" itemValue="true" />
+						<f:selectItem itemLabel="Despesa" itemValue="false" />
+					</p:selectOneButton>
+
+
+					<p:outputLabel value="Destino:" />
+
+					<p:selectOneMenu id="desttino" styleClass="bs-select form-control"
+						rendered="true" value="#{financeiroBean.financeiroEdicao.destino}">
+						<f:selectItem itemLabel="Selecione o Destino" itemValue="" />
+						<f:selectItem itemLabel="1 - Empresa" itemValue="false" />
+						<f:selectItem itemLabel="2 - Agencia Bancaria" itemValue="true" />
+					</p:selectOneMenu>
+
+
+					<p:outputLabel value="Observação" />
+
+					<p:inputTextarea cols="15" id="serv" styleClass="form-control"
+						value="#{financeiroBean.financeiroEdicao.descricao}" />
+
+					<br />
+
+				</p:panelGrid>
+
+				<div style="margin-left: 10px;">
+
+					<p:commandButton value="Lançar" id="salvar-button"
+						icon="fa fa-check" action="#{financeiroBean.salvar}"
+						styleClass="btn blue" process="formulario-dialog"
+						update=":frm:financeiroTable :frm:total :frm:msgs"
+						oncomplete="if (!args.validationFailed) PF('edicaoDialog').hide()" />
+
+				</div>
+			</p:dialog>
+
+
+		</h:form>
+
+		<h:form>
+			<p:confirmDialog global="true">
+
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no btn btn-sm red" icon="fa fa-times" />
+
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes btn btn-sm default"
+					icon="fa fa-check" />
+			</p:confirmDialog>
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

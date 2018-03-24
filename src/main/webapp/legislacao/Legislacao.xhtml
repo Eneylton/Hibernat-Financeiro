@@ -1,0 +1,216 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui"
+	template="/templates/Layout.xhtml">
+
+	<ui:define name="content">
+
+		<h:form id="frm" prependId="false">
+
+			<h:inputHidden id="id" readonly="true" />
+
+
+			<h3 class="page-title">
+				<i class="fa fa-gg" style="color: #1caf9a; font-size: 23px" />
+				Prova de Legislação
+			</h3>
+
+			<div class="clearfix"></div>
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+
+					<div class="portlet light ">
+						<div class="portlet-title">
+
+							<p:messages id="msgs" closable="true">
+								<p:effect type="pulsate" event="load" delay="500" />
+							</p:messages>
+
+
+
+							<div class="portlet">
+								<div class="portlet-title">
+
+
+									<p:toolbar id="toolbar"
+										style="margin-top: 20px; background-color:#fff;">
+										<p:toolbarGroup align="left">
+
+
+											<p:commandButton ajax="false" value="Cadastrar"
+												icon="fa fa-plus" id="btn1" styleClass="btn blue-madison"
+												process="@this" actionListener="#{legislacaoBean.salvar}"
+												action="Simulador.xhtml?faces-redirect=true"
+												update=":frm:cadAgenda :frm:msgs" />
+
+
+										</p:toolbarGroup>
+
+										<p:toolbarGroup align="right">
+
+
+											<p:button ajax="false" icon="fa fa-user" value="Alunos"
+												styleClass="btn btn-sm green" outcome="../aluno/Aluno.xhtml" />
+
+										</p:toolbarGroup>
+
+									</p:toolbar>
+
+								</div>
+							</div>
+
+							<div class="col-md-4">
+
+								<p:panelGrid columns="2" styleClass="semBorda">
+
+									<p:outputLabel value="Alunos" />
+
+									<p:selectOneMenu required="true" id="alunos"
+										value="#{legislacaoBean.cadastroAgenda.aluno}"
+										filter="true"
+										styleClass="form-control select2">
+										<f:selectItem itemLabel="Selecione um ALuno" />
+										<f:selectItems value="#{legislacaoBean.listarAlunos}"
+											var="var" itemLabel="#{var.nome}" itemValue="#{var}" />
+
+									</p:selectOneMenu>
+
+
+
+									<p:outputLabel value="Horário:" />
+
+									<p:calendar locale="pt"
+										value="#{legislacaoBean.cadastroAgenda.data}" showOn="button"
+										timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy - HH:mm"
+										minHour="7" maxHour="18" maxMinute="30" />
+
+
+
+								</p:panelGrid>
+
+							</div>
+
+							<div class="col-md-8">
+
+								<p:dataTable value="#{legislacaoBean.listarAlunosAgenda}"
+									editable="true" editMode="cell" var="agenda"
+									widgetVar="cadAgendaTable" reflow="true"
+									emptyMessage="Nenhum Arquivo Cadastrado...." rows="6"
+									paginator="true" paginatorPosition="bottom"
+									style="margin-top: 10px" id="cadAgenda"
+									selection="#{legislacaoBean.cadastroAgendaSelecionada}"
+									selectionMode="single" rowKey="#{agenda.id}">
+
+									<f:facet name="header">
+										<p:outputPanel>
+											<p:spacer style="margin:15px 0px;" />
+
+											<p:inputText id="globalFilter" style="width:350px"
+												onkeyup="PF('cadAgendaTable').filter()"
+												placeholder="Pesquisar" />
+										</p:outputPanel>
+									</f:facet>
+
+									<p:ajax event="rowSelect" update=":frm:toolbar" />
+									<p:ajax event="rowUnselect" update=":frm:toolbar" />
+
+
+
+									<p:column style="width:40px;" headerText="Alunos"
+										filterBy="#{agenda.aluno.nome}">
+										<i class="fa fa-calendar-check-o" style="color: #32aba3" />
+										<p:spacer style="width:10px;" />
+										<h:outputText value="#{agenda.aluno.nome}" />
+
+									</p:column>
+
+									<p:column style="width:40px;" headerText="Prova de Legislação"
+										filterBy="#{agenda.data}">
+
+
+										<p:cellEditor>
+											<f:facet name="output">
+
+												<i class="fa fa-calendar-check-o" style="color: #32aba3" />
+												<p:spacer style="width:10px;" />
+												<h:outputText value="#{agenda.data}">
+													<f:convertDateTime pattern="dd/MM/yyyy HH:mm"
+														timeZone="America/Sao_Paulo" />
+												</h:outputText>
+
+
+
+											</f:facet>
+
+											<f:facet name="input">
+												<i class="fa fa-calendar-check-o" style="color: #32aba3" />
+												<p:spacer style="width:10px;" />
+												
+												<p:calendar value="#{agenda.data}"
+												timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy HH:mm"
+												minHour="7" maxHour="18"  />
+												
+											</f:facet>
+										</p:cellEditor>
+
+									</p:column>
+
+									<p:column headerText="Aprovado"
+										style="width:30px; text-align:center;">
+
+										<p:cellEditor>
+											<f:facet name="output">
+
+												<span class="badge badge-success"><h:outputText
+														value="Sim" style="color:#fff; font-size:12px"
+														rendered="#{agenda.status eq 'true'}" /></span>
+
+												<span class="badge badge-danger"><h:outputText
+														style="color:#fff; font-size:11px; padding:10px"
+														value="Não " rendered="#{agenda.status eq 'false'}" /></span>
+
+											</f:facet>
+
+											<f:facet name="input">
+												<p:selectOneMenu value="#{agenda.status}" style="width:80px">
+
+													<f:selectItem itemLabel="SIM" itemValue="true" />
+													<f:selectItem itemLabel="NÃO" itemValue="false" />
+
+
+												</p:selectOneMenu>
+											</f:facet>
+										</p:cellEditor>
+
+									</p:column>
+
+									<p:column headerText="Email"
+										style="width:10px; text-align:center;">
+
+										<p:commandButton icon="fa fa-envelope"
+											styleClass="btn btn-xs yellow" />
+									</p:column>
+
+									<p:ajax event="cellEdit"
+										listener="#{legislacaoBean.editar(agenda)}"
+										update=":frm:msgs :frm:cadAgenda" process="@this" />
+
+								</p:dataTable>
+
+
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,630 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui"
+	template="/templates/LayoutDashBord.xhtml">
+
+	<ui:define name="content">
+
+		<h:form id="frm" prependId="false">
+
+
+			<h3 class="page-title">
+				<i class="fa fa-gg" style="color: #1caf9a; font-size: 23px" />
+				Estatística
+			</h3>
+
+			<div class="clearfix"></div>
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+
+					<div class="portlet light ">
+						<div class="portlet-title">
+
+							<p:messages id="msgs" closable="true">
+								<p:effect type="pulsate" event="load" delay="500" />
+							</p:messages>
+
+
+							<div class="portlet">
+								<div class="portlet-title">
+
+
+
+
+									<div class="col-md-4">
+
+
+										<p:commandLink action="#{corssTabBean.consultar}"
+											onclick="PF('dlg5').show();">
+											<div class="dashboard-stat grey-gallery">
+
+												<div class="visual">
+													<i class="fa fa-bar-chart-o"></i>
+												</div>
+												<div class="details">
+													<div class="number">Resumo Geral</div>
+													<div class="desc">Por ano</div>
+												</div>
+												<a class="more" href="javascript:;">Fluxo de Caixa <i
+													class="m-icon-swapright m-icon-white"></i>
+												</a>
+											</div>
+										</p:commandLink>
+
+
+
+									</div>
+
+									<div class="col-md-8">
+									
+									<div class="tiles">
+												<div class="tile bg-grey-gallery selected">
+													<div class="corner"></div>
+													<div class="check"></div>
+													<div class="tile-body">
+
+														<p:commandLink
+															action="#{estatisticaLancamentoBean.totalLancamento}"
+															onclick="PF('dlg1').show();">
+															<i class="fa fa-bar-chart-o"
+																style="font-size: 57px; margin-top: 39px; color: #fff; margin-left: 23px" />
+														</p:commandLink>
+
+													</div>
+													<div class="tile-object">
+														<div class="name">Lançamentos</div>
+														<div class="number"></div>
+													</div>
+												</div>
+												<div class="tile bg-grey-gallery selected">
+													<div class="corner"></div>
+													<div class="check"></div>
+													<div class="tile-body">
+
+														<p:commandLink
+															action="#{estatisticaCategoriaBean.consultar}"
+															onclick="PF('dlg2').show();">
+															<i class="fa fa-pie-chart"
+																style="font-size: 57px; margin-top: 39px; color: #fff; margin-left: 23px" />
+														</p:commandLink>
+
+													</div>
+													<div class="tile-object">
+														<div class="name">Serviços</div>
+														<div class="number"></div>
+													</div>
+												</div>
+
+												<div class="tile bg-grey-gallery selected">
+													<div class="corner"></div>
+													<div class="check"></div>
+													<div class="tile-body">
+
+														<p:commandLink
+															action="#{estatisticaFrmPagamentoBean.consultar}"
+															onclick="PF('dlg3').show();">
+															<i class="fa fa-line-chart"
+																style="font-size: 57px; margin-top: 39px; color: #fff; margin-left: 23px" />
+														</p:commandLink>
+
+													</div>
+													<div class="tile-object">
+														<div class="name">Rank</div>
+														<div class="number"></div>
+													</div>
+												</div>
+												<div class="tile bg-grey-cascade selected">
+													<div class="corner"></div>
+													<div class="check"></div>
+													<div class="tile-body">
+
+														<p:commandLink
+															action="#{estatisticaUsuarioBean.consultar}"
+															onclick="PF('dlg4').show();">
+															<i class="fa fa-area-chart"
+																style="font-size: 57px; margin-top: 39px; color: #fff; margin-left: 23px" />
+														</p:commandLink>
+
+													</div>
+													<div class="tile-object">
+														<div class="name">Produtividade</div>
+														<div class="number"></div>
+													</div>
+												</div>
+												
+												
+												<div class="tile bg-grey-cascade selected">
+													<div class="corner"></div>
+													<div class="check"></div>
+													<div class="tile-body">
+
+														<p:commandLink
+															action="#{estatisticaUsuarioBean.consultar}"
+															onclick="PF('dlg4').show();">
+															<i class="fa fa-pie-chart"
+																style="font-size: 57px; margin-top: 39px; color: #fff; margin-left: 23px" />
+														</p:commandLink>
+
+													</div>
+													<div class="tile-object">
+														<div class="name">Produtividade</div>
+														<div class="number"></div>
+													</div>
+												</div>
+
+												
+
+											</div>
+									
+									</div>
+
+
+
+
+
+
+
+
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<p:chart type="pie" model="#{estatisticaBean.pieModelTipo}"
+									style="width:310px;" />
+
+
+							</div>
+
+							<div class="col-md-8">
+
+								<p:chart id="graf01" type="line"
+									model="#{estatisticaBarraBean.graficoLinha}"
+									style="width:720px;height:300px" />
+
+
+							</div>
+
+							<div class="col-md-12">
+
+
+								<hr />
+
+								<p:chart type="bar" model="#{estatisticaSexoBean.graficoBarra}"
+									style="width:1090px; height:300px" responsive="true" />
+
+
+							</div>
+
+							<p:dialog header="Total de Lançamentos Mensais" widgetVar="dlg1"
+								minHeight="40" modal="true" positionType="center"
+								style="margin-top:-10px;" width="900">
+
+
+
+								<p:toolbar style=" background-color:#fff;">
+									<p:toolbarGroup align="right">
+
+										<p:commandButton ajax="false" icon="fa fa-print"
+											value="Imprimir" immediate="true" process="@this"
+											styleClass="btn btn-sm blue-steel"
+											onclick="this.form.target='_blank'" />
+
+
+									</p:toolbarGroup>
+								</p:toolbar>
+
+								<hr />
+
+								<p:chart type="bar" id="Barra"
+									model="#{estatisticaLancamentoBean.graficoBarra}"
+									style="width:100%; height:300px" responsive="true" />
+
+
+
+
+							</p:dialog>
+
+							<p:dialog header="Total de serviços utilizados" widgetVar="dlg2"
+								minHeight="40" modal="true" positionType="center"
+								style="margin-top:-161px;" width="920">
+
+
+
+								<p:toolbar style="background-color:#fff;">
+									<p:toolbarGroup align="right">
+
+										<p:commandButton ajax="false" icon="fa fa-print"
+											value="Imprimir" immediate="true" process="@this"
+											styleClass="btn btn-sm blue-steel"
+											onclick="this.form.target='_blank'" />
+
+
+									</p:toolbarGroup>
+								</p:toolbar>
+
+								<hr />
+
+								<p:panelGrid columns="2" styleClass="semBorda">
+									<p:chart type="pie"
+										model="#{estatisticaCategoriaBean.pieModelTipo}"
+										style="width:420px;" />
+
+									<p:chart type="pie"
+										model="#{estatisticaServicoBean.pieModelTipo}"
+										style="width:430px;" />
+
+
+								</p:panelGrid>
+
+
+
+
+							</p:dialog>
+
+
+							<p:dialog header="Total de serviços utilizados" widgetVar="dlg3"
+								minHeight="40" modal="true" positionType="center"
+								style="margin-top:-161px;" width="920">
+
+
+
+								<p:toolbar style="background-color:#fff;">
+									<p:toolbarGroup align="right">
+
+										<p:commandButton ajax="false" icon="fa fa-print"
+											value="Imprimir" immediate="true" process="@this"
+											styleClass="btn btn-sm blue-steel"
+											onclick="this.form.target='_blank'" />
+
+
+									</p:toolbarGroup>
+								</p:toolbar>
+
+								<hr />
+
+								<p:panelGrid columns="2" styleClass="semBorda">
+									<p:chart type="donut"
+										model="#{estatisticaFrmPagamentoBean.donutModel}"
+										style="width:420px;" />
+
+
+									<p:chart type="donut"
+										model="#{estatisticaCivilBean.donutModel}"
+										style="width:420px;" />
+
+
+								</p:panelGrid>
+
+
+							</p:dialog>
+
+							<p:dialog header="Total de Produtividade do usuário"
+								widgetVar="dlg4" minHeight="40" modal="true"
+								positionType="center" style="margin-top:-161px;" width="920">
+
+
+
+								<p:toolbar style="background-color:#fff;">
+									<p:toolbarGroup align="right">
+
+										<p:commandButton ajax="false" icon="fa fa-print"
+											value="Imprimir" immediate="true" process="@this"
+											styleClass="btn btn-sm blue-steel"
+											onclick="this.form.target='_blank'" />
+
+
+									</p:toolbarGroup>
+								</p:toolbar>
+
+								<hr />
+
+								<p:panelGrid columns="2" styleClass="semBorda">
+									<p:chart type="bubble"
+										model="#{estatisticaUsuarioBean.bubbleModel}"
+										style="width:850px" />
+								</p:panelGrid>
+
+
+							</p:dialog>
+
+
+							<p:dialog header="Laçamentos detalhados" widgetVar="dlg5"
+								minHeight="40" modal="true" positionType="center"
+								style="margin-top:-50px;" width="1100">
+
+
+
+
+
+								<hr />
+
+								<p:tabView>
+									<p:tab title="Categoria - Detalhes">
+										<p:toolbar style="background-color:#fff;">
+											<p:toolbarGroup align="right">
+
+												<p:commandButton ajax="false" icon="fa fa-print"
+													value="Imprimir" immediate="true" process="@this"
+													styleClass="btn btn-sm blue-steel"
+													onclick="this.form.target='_blank'" />
+
+
+											</p:toolbarGroup>
+										</p:toolbar>
+
+										<hr />
+
+
+										<p:dataTable var="cross"
+											value="#{corssTabBean.listarTotalCrossTab}"
+											paginatorPosition="bottom" paginator="true">
+
+
+											<p:column headerText="Categoria" style="width:100px">
+												<h:outputText value="#{cross.categoria}" style="color:#fff"
+													styleClass="label bg-blue" />
+											</p:column>
+
+											<p:column headerText="Janeiro">
+												<h:outputLabel value="#{cross.janeiro}"
+													styleClass="label bg-grey-steel">
+													<f:convertNumber type="currency" minFractionDigits="2" />
+												</h:outputLabel>
+
+											</p:column>
+
+											<p:column headerText="Fevereiro">
+												<h:outputLabel value="#{cross.fevereiro}"
+													styleClass="label bg-grey-steel">
+													<f:convertNumber type="currency" minFractionDigits="2" />
+												</h:outputLabel>
+
+											</p:column>
+
+											<p:column headerText="Março">
+												<h:outputLabel value="#{cross.marco}"
+													styleClass="label bg-grey-steel">
+													<f:convertNumber type="currency" minFractionDigits="2" />
+												</h:outputLabel>
+
+											</p:column>
+
+											<p:column headerText="Abril">
+												<h:outputLabel value="#{cross.abril}"
+													styleClass="label bg-grey-steel">
+													<f:convertNumber type="currency" minFractionDigits="2" />
+												</h:outputLabel>
+
+											</p:column>
+
+											<p:column headerText="Maio">
+												<h:outputLabel value="#{cross.maio}"
+													styleClass="label bg-grey-steel">
+													<f:convertNumber type="currency" minFractionDigits="2" />
+												</h:outputLabel>
+
+											</p:column>
+
+											<p:column headerText="Junho">
+												<h:outputLabel value="#{cross.junho}"
+													styleClass="label bg-grey-steel">
+													<f:convertNumber type="currency" minFractionDigits="2" />
+												</h:outputLabel>
+
+											</p:column>
+
+											<p:column headerText="Julho">
+												<h:outputLabel value="#{cross.julho}"
+													styleClass="label bg-grey-steel">
+													<f:convertNumber type="currency" minFractionDigits="2" />
+												</h:outputLabel>
+
+											</p:column>
+
+											<p:column headerText="Agosto">
+												<h:outputLabel value="#{cross.agosto}"
+													styleClass="label bg-grey-steel">
+													<f:convertNumber type="currency" minFractionDigits="2" />
+												</h:outputLabel>
+
+											</p:column>
+
+
+											<p:column headerText="Setembro">
+												<h:outputLabel value="#{cross.setembro}"
+													styleClass="label bg-grey-steel">
+													<f:convertNumber type="currency" minFractionDigits="2" />
+												</h:outputLabel>
+
+											</p:column>
+
+											<p:column headerText="Outubro">
+												<h:outputLabel value="#{cross.outubro}"
+													styleClass="label bg-grey-steel">
+													<f:convertNumber type="currency" minFractionDigits="2" />
+												</h:outputLabel>
+
+											</p:column>
+
+											<p:column headerText="Novembro">
+												<h:outputLabel value="#{cross.novembro}"
+													styleClass="label bg-grey-steel">
+													<f:convertNumber type="currency" minFractionDigits="2" />
+												</h:outputLabel>
+
+											</p:column>
+
+											<p:column headerText="Dezembro">
+												<h:outputLabel value="#{cross.dezembro}"
+													styleClass="label bg-grey-steel">
+													<f:convertNumber type="currency" minFractionDigits="2" />
+												</h:outputLabel>
+
+											</p:column>
+											<p:column headerText="Total">
+												<h:outputLabel value="#{cross.total}"
+													styleClass="label bg-grey-silver">
+													<f:convertNumber type="currency" minFractionDigits="2" />
+												</h:outputLabel>
+
+											</p:column>
+
+
+										</p:dataTable>
+
+									</p:tab>
+									<p:tab title="Serviços - Detalhes">
+
+										<p:toolbar style="background-color:#fff;">
+											<p:toolbarGroup align="right">
+
+												<p:commandButton ajax="false" icon="fa fa-print"
+													value="Imprimir" immediate="true" process="@this"
+													styleClass="btn btn-sm blue-steel"
+													onclick="this.form.target='_blank'" />
+
+
+											</p:toolbarGroup>
+										</p:toolbar>
+
+										<hr />
+
+										<p:dataTable var="cross"
+											value="#{corssTabServicosBean.listarTotalCrossTabServicos}"
+											paginatorPosition="bottom" paginator="true">
+
+
+											<p:column headerText="Serviços" style="width:100px">
+												<h:outputText value="#{cross.servicos}" style="color:#fff"
+													styleClass="label bg-green-meadow" />
+											</p:column>
+
+											<p:column headerText="Janeiro">
+												<h:outputLabel value="#{cross.janeiro}"
+													styleClass="label bg-grey-steel">
+													<f:convertNumber type="currency" minFractionDigits="2" />
+												</h:outputLabel>
+
+											</p:column>
+
+											<p:column headerText="Fevereiro">
+												<h:outputLabel value="#{cross.fevereiro}"
+													styleClass="label bg-grey-steel">
+													<f:convertNumber type="currency" minFractionDigits="2" />
+												</h:outputLabel>
+
+											</p:column>
+
+											<p:column headerText="Março">
+												<h:outputLabel value="#{cross.marco}"
+													styleClass="label bg-grey-steel">
+													<f:convertNumber type="currency" minFractionDigits="2" />
+												</h:outputLabel>
+
+											</p:column>
+
+											<p:column headerText="Abril">
+												<h:outputLabel value="#{cross.abril}"
+													styleClass="label bg-grey-steel">
+													<f:convertNumber type="currency" minFractionDigits="2" />
+												</h:outputLabel>
+
+											</p:column>
+
+											<p:column headerText="Maio">
+												<h:outputLabel value="#{cross.maio}"
+													styleClass="label bg-grey-steel">
+													<f:convertNumber type="currency" minFractionDigits="2" />
+												</h:outputLabel>
+
+											</p:column>
+
+											<p:column headerText="Junho">
+												<h:outputLabel value="#{cross.junho}"
+													styleClass="label bg-grey-steel">
+													<f:convertNumber type="currency" minFractionDigits="2" />
+												</h:outputLabel>
+
+											</p:column>
+
+											<p:column headerText="Julho">
+												<h:outputLabel value="#{cross.julho}"
+													styleClass="label bg-grey-steel">
+													<f:convertNumber type="currency" minFractionDigits="2" />
+												</h:outputLabel>
+
+											</p:column>
+
+											<p:column headerText="Agosto">
+												<h:outputLabel value="#{cross.agosto}"
+													styleClass="label bg-grey-steel">
+													<f:convertNumber type="currency" minFractionDigits="2" />
+												</h:outputLabel>
+
+											</p:column>
+
+
+											<p:column headerText="Setembro">
+												<h:outputLabel value="#{cross.setembro}"
+													styleClass="label bg-grey-steel">
+													<f:convertNumber type="currency" minFractionDigits="2" />
+												</h:outputLabel>
+
+											</p:column>
+
+											<p:column headerText="Outubro">
+												<h:outputLabel value="#{cross.outubro}"
+													styleClass="label bg-grey-steel">
+													<f:convertNumber type="currency" minFractionDigits="2" />
+												</h:outputLabel>
+
+											</p:column>
+
+											<p:column headerText="Novembro">
+												<h:outputLabel value="#{cross.novembro}"
+													styleClass="label bg-grey-steel">
+													<f:convertNumber type="currency" minFractionDigits="2" />
+												</h:outputLabel>
+
+											</p:column>
+
+											<p:column headerText="Dezembro">
+												<h:outputLabel value="#{cross.dezembro}"
+													styleClass="label bg-grey-steel">
+													<f:convertNumber type="currency" minFractionDigits="2" />
+												</h:outputLabel>
+
+											</p:column>
+											<p:column headerText="Total">
+												<h:outputLabel value="#{cross.total}"
+													styleClass="label bg-grey-silver">
+													<f:convertNumber type="currency" minFractionDigits="2" />
+												</h:outputLabel>
+
+											</p:column>
+
+
+										</p:dataTable>
+
+
+									</p:tab>
+								</p:tabView>
+
+
+							</p:dialog>
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

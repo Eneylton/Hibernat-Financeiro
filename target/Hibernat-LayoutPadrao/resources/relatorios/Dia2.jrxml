@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Dia" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="34826600-072e-432d-92d1-80810edbf7fc">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="Fluxo" uuid="729162da-6c8d-4f9b-bf6a-35c26fe7e7ba">
+		<queryString>
+			<![CDATA[SELECT
+
+    r.diaReceita,d.diaDespesa,r.receita,d.despesa
+
+FROM
+    (SELECT day(rec.data) as diaReceita,
+        rec.tipo AS tipoReceita, COUNT(rec.tipo) receita
+    FROM
+        financeiro AS rec
+    WHERE
+        rec.tipo = '1' group by diaReceita) AS r,
+    (SELECT day(desp.data) as diaDespesa,
+        desp.tipo AS tipoDespesa, COUNT(desp.tipo) despesa
+    FROM
+        financeiro AS desp
+    WHERE
+
+desp.tipo = '0' group by diaDespesa) AS d order by diaReceita,diaDespesa asc;
+
+
+
+
+]]>
+		</queryString>
+		<field name="diaReceita" class="java.lang.Integer"/>
+		<field name="diaDespesa" class="java.lang.Integer"/>
+		<field name="receita" class="java.lang.Long"/>
+		<field name="despesa" class="java.lang.Long"/>
+	</subDataset>
+	<queryString>
+		<![CDATA[Select * from financeiro]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="data" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="dataPagamento" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="valor" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="quantidade" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="parcelaExtenso" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="servico_id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="aluno_id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="status" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tipo" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="descricao" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="destino" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="valorExtenso" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="usuario_id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="empresa_id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="categoria_financeiro_id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="forma_pagamento_id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="573" splitType="Stretch">
+			<stackedBar3DChart>
+				<chart>
+					<reportElement x="0" y="0" width="555" height="178" uuid="4b6ff16f-978a-4952-81a1-ebf5c857273d"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="Fluxo" uuid="75e27943-5165-421d-91d8-54cf51f10124"/>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["Despesa"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{diaDespesa}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{despesa}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Receita"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{diaReceita}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{receita}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<bar3DPlot>
+					<plot>
+						<seriesColor seriesOrder="0" color="#FFCC00"/>
+						<seriesColor seriesOrder="1" color="#3399FF"/>
+					</plot>
+					<itemLabel/>
+					<categoryAxisFormat>
+						<axisFormat/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat/>
+					</valueAxisFormat>
+				</bar3DPlot>
+			</stackedBar3DChart>
+			<lineChart>
+				<chart>
+					<reportElement x="0" y="201" width="555" height="172" uuid="d35c7478-752d-493f-b641-e0ad60252f8a"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="Fluxo" uuid="36b189a6-01a3-4610-8850-07d84333d506"/>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["Receita"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{diaReceita}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{receita}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Despesa"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{diaDespesa}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{despesa}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<linePlot>
+					<plot>
+						<seriesColor seriesOrder="0" color="#FFCC33"/>
+						<seriesColor seriesOrder="1" color="#00CCCC"/>
+					</plot>
+					<categoryAxisFormat>
+						<axisFormat/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat/>
+					</valueAxisFormat>
+				</linePlot>
+			</lineChart>
+			<stackedAreaChart>
+				<chart>
+					<reportElement x="0" y="397" width="555" height="176" uuid="f3abcce0-8552-44d3-9d0d-3d397b9f7110"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="Fluxo" uuid="6f7734ca-5ae3-49eb-abd1-e8bff28b3548"/>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["Receita"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{diaReceita}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{receita}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Despesa"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{diaDespesa}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{despesa}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<areaPlot>
+					<plot>
+						<seriesColor seriesOrder="0" color="#FFCC00"/>
+						<seriesColor seriesOrder="1" color="#00CCCC"/>
+					</plot>
+					<categoryAxisFormat>
+						<axisFormat/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat/>
+					</valueAxisFormat>
+				</areaPlot>
+			</stackedAreaChart>
+		</band>
+	</summary>
+</jasperReport>

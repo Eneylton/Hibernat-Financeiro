@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AlunoMapa" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ad8c9191-93e5-42f7-a41d-7f0e369d81d1">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="174"/>
+	<parameter name="idEmpresa" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select  al.id as idAluno,
+    al.data,
+    al.nome,
+    al.sobrenome,
+    al.dataNascimento,
+    al.rg,
+    al.cpf,
+    al.fixo,
+    al.wathsapp,
+    al.email,
+    al.endereco,
+    al.numero,
+    al.bairro,
+    al.latitude,
+    al.longitude,
+    al.sobreNome,
+    al.foto,
+    emp.razao,
+    emp.cnpj,
+    emp.id AS idEmpresa,
+    emp.nome AS empresa,
+    emp.logo AS logo,
+    serv.id AS idServico,
+    serv.descricao AS servicos,
+    serv.valor AS valorServico
+from aluno as al
+INNER JOIN servico as serv On (al.servico_id = serv.id)
+INNER JOIN empresa as emp On (al.empresa_id = emp.id)
+Where al.empresa_id = $P{idEmpresa}]]>
+	</queryString>
+	<field name="idAluno" class="java.lang.Integer"/>
+	<field name="data" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nome" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="sobrenome" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="dataNascimento" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="rg" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cpf" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fixo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="wathsapp" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="email" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="endereco" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="numero" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="bairro" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="latitude" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="longitude" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="foto" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="razao" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cnpj" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="idEmpresa" class="java.lang.Integer"/>
+	<field name="empresa" class="java.lang.String"/>
+	<field name="logo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="idServico" class="java.lang.Integer"/>
+	<field name="servicos" class="java.lang.String"/>
+	<field name="valorServico" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<image>
+				<reportElement x="4" y="4" width="85" height="65" uuid="e279a9fd-f790-4c7b-92d4-63dada620537"/>
+				<imageExpression><![CDATA["C:\\Meus_projetos_2018\\Hibernat-Financeiro\\src\\main\\webapp\\resources\\img\\" + $F{logo}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="103" y="10" width="266" height="20" uuid="9813c3ca-2ee1-48c9-a57b-9aaf74f85dfb"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{empresa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="104" y="30" width="162" height="20" uuid="5d50b588-abb5-493e-ac17-424cc1883cb7"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{cnpj}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="384" y="30" width="168" height="20" uuid="f408524e-5a48-4468-97d2-076f5ea686ca"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="327" y="10" width="228" height="20" uuid="93c4b4b2-3737-4e67-960c-1401d0c0022c"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RELATÓRIO GERAL - ALUNOS MATRICULADOS]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="50" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="6" width="554" height="21" forecolor="#F5F5F5" backcolor="#F5F5F5" uuid="73194cf0-c573-4b1b-9d27-e4cbcc766af4"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="2" y="7" width="551" height="20" uuid="1651770f-e47c-4930-b726-4b2080558c2b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LISTA DE ALUNOS]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="222" splitType="Stretch">
+			<rectangle>
+				<reportElement x="265" y="14" width="286" height="157" forecolor="#E0E0E0" uuid="7b189901-9930-43a9-a1d8-cbc503359098"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<line>
+				<reportElement x="0" y="208" width="555" height="1" uuid="e9cd66b8-897c-44a1-b533-342fa9a24ab6"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="0" y="3" width="554" height="1" forecolor="#DDDDDD" uuid="1c83a13a-8626-4062-a733-7ad199c5a2ad"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</line>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="123" y="34" width="136" height="20" uuid="0acdfb1a-fe08-4842-a782-70ed053a2d84"/>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[$F{data}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="81" y="34" width="34" height="20" uuid="15416e3e-af90-4852-b684-24e4f82dd9c9"/>
+				<textElement verticalAlignment="Top">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data:]]></text>
+			</staticText>
+			<textField pattern="h:mm a">
+				<reportElement x="124" y="52" width="83" height="20" uuid="39ceaa4d-a442-4665-892a-fdf529ce429c"/>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[$F{data}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="123" y="16" width="68" height="20" uuid="251531ca-4b9a-4f06-a7c7-d9a2b39735ed"/>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="81" y="16" width="34" height="20" uuid="6a433196-3089-4571-8198-6fc3865c4cb9"/>
+				<textElement verticalAlignment="Top">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="132" y="135" width="34" height="20" uuid="481d6e92-3700-46fe-a8c1-697a785a4755"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CPF:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="135" width="34" height="20" uuid="4728f868-4e4d-41fb-9d89-6b9c52251424"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[RG:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="161" y="135" width="100" height="20" uuid="5e082c09-6fb5-479b-99cf-7b1f2a4ab157"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{cpf}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="46" y="135" width="88" height="20" uuid="52e15e9a-64cf-4a2a-8115-8a73b210027e"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{rg}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="2" y="15" width="70" height="70" uuid="5f8e040c-67db-4da0-ac67-164967a56b73"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="81" y="67" width="51" height="20" uuid="7ad81c3b-81f4-4a85-b79b-d78bb63a960c"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Matrícula:]]></text>
+			</staticText>
+			<image>
+				<reportElement x="4" y="18" width="67" height="65" uuid="a31bef39-4b19-49d8-98a1-1923c0d4b5b6"/>
+				<imageExpression><![CDATA["C:\\Meus_projetos_2018\\Hibernat-Financeiro\\src\\main\\webapp\\resources\\img\\" + $F{foto}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="81" y="52" width="34" height="20" uuid="33c5cd9c-d7bd-435f-b3b8-5a4286f429b9"/>
+				<textElement verticalAlignment="Top">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Hora:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="46" y="95" width="215" height="20" uuid="fe4a9662-1305-41cd-8321-98965d073100"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{servicos}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="95" width="44" height="20" uuid="161098b0-0ec7-4ec2-8fe0-f341919810c8"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Serviço:]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="46" y="115" width="100" height="20" uuid="2c7328f1-f3d7-4c31-87bf-866f533d8721"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{valorServico}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="115" width="44" height="20" uuid="33c895de-6f20-4f3c-9dac-8ac2d9aeb330"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="151" y="160" width="100" height="20" uuid="47adab69-679e-4095-b896-e7634028da89"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{wathsapp}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="19" y="181" width="182" height="20" uuid="3342d8d5-5035-4b77-b927-693e652fe35a"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="186" y="67" width="69" height="20" uuid="28362e50-b1b3-4b65-b211-b1cb342c6794"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{dataNascimento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="175" width="104" height="21" uuid="de24f34a-a055-40ad-8505-7a1f97855832"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{endereco}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="400" y="175" width="24" height="21" uuid="c978417c-a794-43fe-9920-20cc062dd0a1"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numero}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="464" y="175" width="87" height="21" uuid="688d4587-e640-498c-bf16-8ce1389cdba1"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{bairro}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="384" y="175" width="16" height="21" uuid="1b72ef62-bc6f-4f2d-bdc4-0f03c34bc26e"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nº:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="429" y="175" width="35" height="21" uuid="c1c36940-3636-47eb-abeb-22869d8acdb2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Bairro:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="1" y="91" width="258" height="1" uuid="a2fa57c8-b070-44fe-bdc7-a100f44ebebf"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</line>
+			<image>
+				<reportElement x="189" y="71" width="10" height="10" uuid="e9f20e35-7965-4ea9-9ca0-dc305d4ed478"/>
+				<imageExpression><![CDATA["C:\\Meus_projetos_2018\\Hibernat-Financeiro\\src\\main\\webapp\\resources\\img\\niver.png"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="3" y="186" width="10" height="10" uuid="666a1b86-b530-4691-9e5c-b68ccb7a44ef"/>
+				<imageExpression><![CDATA["C:\\Meus_projetos_2018\\Hibernat-Financeiro\\src\\main\\webapp\\resources\\img\\mail.png"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="132" y="165" width="10" height="10" uuid="fe83be4c-e8ea-490a-a787-6ba081357cc9"/>
+				<imageExpression><![CDATA["C:\\Meus_projetos_2018\\Hibernat-Financeiro\\src\\main\\webapp\\resources\\img\\wts.jpg"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="3" y="165" width="10" height="10" uuid="ff45c71c-a598-4d20-b8a2-adfa234896fc"/>
+				<imageExpression><![CDATA["C:\\Meus_projetos_2018\\Hibernat-Financeiro\\src\\main\\webapp\\resources\\img\\tel.png"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="19" y="160" width="100" height="20" uuid="a1509d96-2914-4cd9-9708-20b631c00b3a"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{fixo}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="264" y="180" width="10" height="10" uuid="d2c4d493-0693-43ac-b6f4-2f250a479036"/>
+				<imageExpression><![CDATA["C:\\Meus_projetos_2018\\Hibernat-Financeiro\\src\\main\\webapp\\resources\\img\\mk.png"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="158" y="16" width="100" height="20" uuid="418d9bdf-6ed1-4ced-83b5-11254b7f4c0f"/>
+				<textFieldExpression><![CDATA[$F{sobrenome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="131" y="67" width="43" height="20" uuid="e7f6e698-eb54-4913-b59c-ce896658c136"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{idAluno}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="271" y="19" width="277" height="147" uuid="ec6ada1f-ae2d-4b6b-8520-8190fbd78e76"/>
+				<mp:map xmlns:mp="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<mp:latitudeExpression><![CDATA[$F{latitude}]]></mp:latitudeExpression>
+					<mp:longitudeExpression><![CDATA[$F{longitude}]]></mp:longitudeExpression>
+					<mp:zoomExpression><![CDATA[17]]></mp:zoomExpression>
+				</mp:map>
+			</componentElement>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

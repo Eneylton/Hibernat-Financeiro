@@ -1,0 +1,141 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui"
+	template="/templates/LayoutDashBord.xhtml">
+
+	<ui:define name="content">
+
+
+		<h:form id="frm" prependId="false">
+
+		
+				<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+					<div class="dashboard-stat blue-madison">
+						<div class="visual">
+							<i class="fa fa-comments"></i>
+						</div>
+						<div class="details">
+							<div class="number">1349</div>
+							<div class="desc">Alunos Matrículados</div>
+						</div>
+						<a class="more" href="../aluno/Aluno.xhtml"> Novo Aluno <i
+							class="m-icon-swapright m-icon-white"></i>
+						</a>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+					<div class="dashboard-stat red-intense">
+						<div class="visual">
+							<i class="fa fa-bar-chart-o"></i>
+						</div>
+						<div class="details">
+							<div class="number">R$ 2,253,23</div>
+							<div class="desc">Estatística</div>
+						</div>
+						<a class="more" href="../estatistica/Estatistica.xhtml">Mais Detahes <i
+							class="m-icon-swapright m-icon-white"></i>
+						</a>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+					<div class="dashboard-stat green-haze">
+						<div class="visual">
+							<i class="fa fa-shopping-cart"></i>
+						</div>
+						<div class="details">
+							<div class="number">549</div>
+							<div class="desc">New Orders</div>
+						</div>
+						<a class="more" href="javascript:;"> View more <i
+							class="m-icon-swapright m-icon-white"></i>
+						</a>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+					<div class="dashboard-stat purple-plum">
+						<div class="visual">
+							<i class="fa fa-globe"></i>
+						</div>
+						<div class="details">
+							<div class="number">+89%</div>
+							<div class="desc">Brand Popularity</div>
+						</div>
+						<a class="more" href="javascript:;"> View more <i
+							class="m-icon-swapright m-icon-white"></i>
+						</a>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-12 ">
+						<div class="ui-g">
+							<div class="col-md-5">
+								<div class="portlet solid bordered grey-cararra">
+						<div class="portlet-title">
+							<div class="caption">
+								<i class="fa fa-pie-chart"></i>Fluxo de Caixa
+							</div>
+							<div class="actions">
+								<div class="btn-group" data-toggle="buttons">
+									<label class="btn grey-steel btn-sm active">
+									
+									<input type="radio" name="options" class="toggle" id="option2" />Estatística</label>
+								</div>
+							</div>
+						</div>
+						<div class="portlet-body">
+							<div id="site_statistics_loading">
+								<p:chart type="donut"
+										model="#{estatisticaFrmPagamentoBean.donutModel}"
+										style="width:420px;" />
+							</div>
+							<div id="site_statistics_content" class="display-none">
+								<div id="site_statistics" class="chart">
+								</div>
+							</div>
+						</div>
+					</div>
+							</div>
+							<div class="col-md-7">
+							
+							<div class="portlet solid bordered grey-cararra">
+						<div class="portlet-title">
+							<div class="caption">
+								<i class="fa fa-bar-chart-o"></i>Movimentações Diárias
+							</div>
+							<div class="actions">
+								<div class="btn-group" data-toggle="buttons">
+									<label class="btn grey-steel btn-sm active">
+									<input type="radio" name="options" class="toggle" id="option1" />Imprimir</label>
+									<label class="btn grey-steel btn-sm">
+									<input type="radio" name="options" class="toggle" id="option2" />Estatística</label>
+								</div>
+							</div>
+						</div>
+						<div class="portlet-body">
+							<div id="site_statistics_loading">
+								<p:chart id="graf01" type="line"
+									model="#{estatisticaBarraBean.graficoLinha}" responsive="true"
+									style="width:100%;height:300px" />
+							</div>
+							<div id="site_statistics_content" class="display-none">
+								<div id="site_statistics" class="chart">
+								</div>
+							</div>
+						</div>
+					</div>
+							
+							
+							</div>
+						</div>
+					</div>
+				</div>
+			
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

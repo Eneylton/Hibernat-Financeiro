@@ -1,0 +1,590 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui"
+	template="/templates/Layout.xhtml">
+
+	<ui:define name="content">
+
+		<f:metadata>
+			<o:viewParam name="aluno" value="#{alunoBean.aluno}" />
+		</f:metadata>
+
+		<h:form id="frm" prependId="false">
+
+			<h:inputHidden id="id" value="#{alunoBean.aluno.id}" readonly="true" />
+
+
+			<h3 class="page-title">
+				<i class="fa fa-gg" style="color: #1caf9a; font-size: 23px" />
+				Alunos
+			</h3>
+
+			<div class="clearfix"></div>
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+
+					<div class="portlet light ">
+						<div class="portlet-title">
+
+							<p:messages id="msgs" closable="true">
+								<p:effect type="pulsate" event="load" delay="500" />
+							</p:messages>
+
+
+
+							<div class="portlet">
+								<div class="portlet-title">
+
+
+									<p:toolbar id="toolbar"
+										style="margin-top: 20px; background-color:#fff;">
+										<p:toolbarGroup align="left">
+
+											<p:commandButton value="Novo" icon="fa fa-plus" id="btn1"
+												styleClass="btn blue-madison"
+												action="#{alunoBean.prepararNovoCadastro}" process="@this"
+												update="formulario-dialog"
+												oncomplete="PF('edicaoDialog').show()">
+
+
+												<p:resetInput target="formulario-dialog" />
+
+
+											</p:commandButton>
+
+
+											<span class="ui-separator"> <span
+												class="ui-icon ui-icon-grip-dotted-vertical" />
+											</span>
+
+
+											<p:commandButton icon="fa fa-pencil" title="Editar"
+												value="Editar" styleClass="btn blue-hoki" id="btn2"
+												process="@this" update="formulario-dialog"
+												oncomplete="PF('edicaoDialog').show()"
+												disabled="#{alunoBean.alunoSelecionada == null}">
+
+
+												<p:resetInput target="formulario-dialog" />
+
+												<f:setPropertyActionListener
+													value="#{alunoBean.alunoSelecionada}"
+													target="#{alunoBean.alunoEdicao}" />
+											</p:commandButton>
+
+
+											<p:spacer style="margin-left:10px" />
+
+											<p:commandButton icon="fa fa-trash" title="Excluir"
+												value="Excluir" id="btn3" process="@this"
+												styleClass="btn red-sunglo"
+												update=":frm:alunoTable :frm:msgs :frm:toolbar"
+												action="#{alunoBean.excluir}"
+												disabled="#{alunoBean.alunoSelecionada == null}">
+
+
+
+												<p:confirm icon="ui-icon-alert"
+													header="Confirmação de exclusão"
+													message="Tem Certeza que Deseja Excluir esse aluno ?" />
+
+											</p:commandButton>
+
+										</p:toolbarGroup>
+
+										<p:toolbarGroup align="right">
+
+
+
+											<p:commandButton value="Localização" icon="fa fa-map-marker"
+												styleClass="btn btn-sm yellow-crusta"
+												action="#{localizacaoBean.localizar}"
+												onclick="PF('local').show();" update=":frmLocal:mapa" />
+
+
+
+											<span class="ui-separator"> <span
+												class="ui-icon ui-icon-grip-dotted-vertical" />
+											</span>
+
+
+											<p:commandButton ajax="false" icon="fa fa-upload"
+												immediate="true" process="@this" value="Exporta PDF"
+												styleClass="btn green" onclick="this.form.target='_blank'"
+												action="#{alunoBean.alunoPDF}" />
+										</p:toolbarGroup>
+
+									</p:toolbar>
+
+								</div>
+							</div>
+
+
+							<p:dataTable value="#{alunoBean.listarAlunos}" var="aluno"
+								widgetVar="alunoTable" reflow="true"
+								emptyMessage="Nenhum Arquivo Cadastrado...." rows="10"
+								paginator="true" paginatorPosition="bottom"
+								style="margin-top: 10px" id="alunoTable"
+								selection="#{alunoBean.alunoSelecionada}" selectionMode="single"
+								rowKey="#{aluno.id}">
+
+								<f:facet name="header">
+									<p:outputPanel>
+										<p:spacer style="margin:15px 0px;" />
+
+										<p:inputText id="globalFilter" style="width:350px"
+											onkeyup="PF('alunoTable').filter()" placeholder="Pesquisar" />
+									</p:outputPanel>
+								</f:facet>
+
+								<p:ajax event="rowSelect" update=":frm:toolbar" />
+								<p:ajax event="rowUnselect" update=":frm:toolbar" />
+
+
+								<p:column headerText="Código"
+									style="width:20px; text-align:center;">
+									<i class="fa fa-circle-o text-blue"></i>
+									<p:spacer style="width:10px;" />
+									<h:outputText value="#{aluno.id}" />
+								</p:column>
+
+
+								<p:column style="width:70px; text-align:left;"
+									headerText="Alunos" priority="4" filterBy="#{aluno.nome}">
+									<i class="fa  fa-user" style="color: #3c8dbc" />
+									<p:spacer style="width:10px;" />
+									<h:outputText value="#{aluno.nome} #{aluno.sobreNome}" />
+								</p:column>
+
+								<p:column style="width:70px;" headerText="Email" priority="4"
+									filterBy="#{aluno.email}">
+									<i class="fa fa-envelope-o" style="color: #3c8dbc" />
+									<p:spacer style="width:10px;" />
+									<h:outputText value="#{aluno.email}" />
+								</p:column>
+
+								<p:column style="width:40px;" headerText="Whatsapp" priority="4"
+									filterBy="#{aluno.wathsapp}">
+									<i class="fa fa-whatsapp" style="color: green" />
+									<p:spacer style="width:10px;" />
+									<h:outputText value="#{aluno.wathsapp}" />
+								</p:column>
+
+
+								<p:column style="width:30px; text-align:center;"
+									headerText="Ações">
+									
+										<p:button value="Financeiro"
+										styleClass="btn btn-sm blue steel" type="button"
+										icon="fa fa-dollar" title="Teste Avaliação"
+										outcome="../aluno/PainelAlunoFinanceiro.xhtml">
+
+										<f:param name="aluno" value="#{aluno.id}" />
+
+									</p:button>
+
+								
+
+
+								</p:column>
+
+
+
+							</p:dataTable>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<p:dialog header="Novo Aluno" widgetVar="edicaoDialog"
+				styleClass="modal-header" id="formulario-dialog" resizable="false"
+				modal="true" width="900" positionType="center"
+				style="margin-top:-40px" closeOnEscape="true">
+
+				<h:inputHidden id="latitude"
+					value="#{alunoBean.alunoEdicao.latitude}" readonly="true" />
+
+				<h:inputHidden id="longitude"
+					value="#{alunoBean.alunoEdicao.longitude}" readonly="true" />
+
+				<p:messages id="msgs-dialog" closable="true">
+					<p:effect type="pulsate" event="load" delay="500" />
+				</p:messages>
+				<p:defaultCommand target="salvar-button" scope="formulario-dialog" />
+
+
+				<br />
+
+				<div class="portlet">
+					<div class="portlet-title">
+
+
+						<p:toolbar id="toolbar2"
+							style="margin-top: 10px; background-color:#fff;">
+
+							<p:toolbarGroup align="left">
+
+								<span style="font-size: 12px; font-weight: 100;"
+									class="caption-subject font-green-sharp bold uppercase">Cadastro
+									de alunos </span>
+								<span class="caption-helper"
+									style="font-size: 10px; font-weight: 100; color: #b7b7b7">novo
+									cadastro </span>
+								<p />
+							</p:toolbarGroup>
+
+							<p:toolbarGroup align="right">
+								<p:commandButton value="Salvar" id="salvar-button"
+									icon="fa fa-check" action="#{alunoBean.salvar}"
+									styleClass="btn blue" process="formulario-dialog"
+									update=":frm:alunoTable :frm:msgs :frmLocal:dialogLocal"
+									oncomplete="if (!args.validationFailed) PF('edicaoDialog').hide()" />
+
+
+							</p:toolbarGroup>
+
+						</p:toolbar>
+
+					</div>
+
+
+				</div>
+
+
+
+
+				<div class="col-md-12">
+
+					<div class="row">
+
+
+						<div class="col-md-12">
+
+							<div class="portlet-body">
+								<div class="tabbable">
+									<ul class="nav nav-tabs">
+										<li class="active"><a href="#tab_001" data-toggle="tab"><i
+												class="fa fa-user" style="color: #23abb8" /> Dados do
+												Aluno: </a></li>
+
+										<li><a href="#tab_002" data-toggle="tab"><i
+												class="fa fa-map-marker" style="color: #ff0000;" />
+												Endereço </a></li>
+
+										<li><a href="#tab_003" data-toggle="tab"><i
+												class="fa fa-clipboard" style="color: #1f4a80;" />
+												Documentos </a></li>
+
+										<li><a href="#tab_004" data-toggle="tab"><i
+												class="fa fa-wrench" style="color: #3697dc;" /> Serviços </a></li>
+
+
+										<li><a href="#tab_005" data-toggle="tab"><i
+												class="fa fa-phone-square" style="color: #ff9800;" />
+												Contatos </a></li>
+
+									</ul>
+
+
+
+									<div class="tab-content no-space">
+
+
+										<div class="tab-pane active" id="tab_001">
+											<div class="form-body">
+												<div class="ui-g-4">
+													<p:outputLabel value="Nome:" />
+													<br />
+
+													<p:inputText maxlength="80" style="width:150px"
+														value="#{alunoBean.alunoEdicao.nome}" />
+
+												</div>
+												<div class="ui-g-4">
+													<p:outputLabel value="Sobrenome:" />
+													<br />
+
+													<p:inputText maxlength="80" style="width:180px"
+														value="#{alunoBean.alunoEdicao.sobreNome}" />
+
+												</div>
+												<div class="ui-g-4">
+													<p:outputLabel value="Foto" />
+
+													<p:fileUpload
+														fileUploadListener="#{alunoBean.handleFileUpload}"
+														label="Foto" auto="true" mode="advanced"
+														dragDropSupport="false" sizeLimit="5000000" fileLimit="1"
+														allowTypes="/(\.|\/)(jpg|png)$/" />
+
+												</div>
+
+
+												<div class="ui-g-4">
+													<p:outputLabel value="Data de Nascimento" />
+													<p:calendar yearRange="-111:+39"
+														value="#{alunoBean.alunoEdicao.dataNascimento}"
+														pattern="dd/MM/yyyy" id="data" navigator="true" pages="2"
+														locale="pt" required="true" />
+
+
+												</div>
+
+												<div class="ui-g-4">
+													<p:outputLabel value="Estado Civil" />
+
+													<p:selectOneMenu styleClass="form-control select2"
+														filter="true" value="#{alunoBean.alunoEdicao.estadoCivil}">
+														<f:selectItem itemLabel="Selecione um Estado Civil" />
+														<f:selectItems value="#{alunoBean.listarEstadoCivis}"
+															var="var" itemLabel="#{var.descricao}" itemValue="#{var}" />
+													</p:selectOneMenu>
+
+												</div>
+
+
+												<div class="ui-g-4">
+													<p:outputLabel value="Sexo" />
+
+													<p:selectOneMenu styleClass="form-control select2"
+														filter="true" value="#{alunoBean.alunoEdicao.sexo}">
+														<f:selectItem itemLabel="Selecione um Sexo" />
+														<f:selectItems value="#{alunoBean.listarSexos}" var="var"
+															itemLabel="#{var.descricao}" itemValue="#{var}" />
+													</p:selectOneMenu>
+
+
+
+												</div>
+
+
+
+											</div>
+										</div>
+
+										<div class="tab-pane" id="tab_002">
+											<div class="form-body">
+												<div class="col-md-6">
+													<p:panelGrid id="png" columns="2" styleClass="semBorda">
+
+														<p:inputMask id="address" mask="99999-999"
+															placeholder="cep" value="#{alunoBean.alunoEdicao.cep}" />
+
+														<p:commandButton icon="fa fa-search" ajax="false"
+															onclick="geocode()" type="button"
+															oncomplete="PF('edicaoDialog').show();"
+															styleClass="btn red-intense" update="@form">
+
+															<p:ajax listener="#{alunoBean.cep}" process="@form"
+																update=":frm:png :frm:geoGmap" />
+
+														</p:commandButton>
+
+														<p:inputText placeholder="Endereço:"
+															value="#{alunoBean.alunoEdicao.endereco}" />
+
+
+														<p:inputText placeholder="Bairro:"
+															value="#{alunoBean.alunoEdicao.bairro}" />
+
+
+
+														<p:inputText placeholder="Nº:"
+															value="#{alunoBean.alunoEdicao.numero}" />
+
+
+
+														<p:inputText placeholder="Cidade:"
+															value="#{alunoBean.alunoEdicao.cidade}" />
+
+
+														<p:inputText placeholder="Estado:"
+															value="#{alunoBean.alunoEdicao.estado}" />
+
+													</p:panelGrid>
+
+												</div>
+
+
+
+
+												<div class="col-md-6">
+
+
+													<p:gmap id="geoGmap" widgetVar="geoMap"
+														center="#{alunoBean.centerGeoMap}" zoom="15"
+														type="ROADMAP" model="#{alunoBean.geoModel}"
+														style="width:100%; height:200px">
+														<p:ajax event="geocode" listener="#{alunoBean.onGeocode}"
+															process="@form" update="@this" />
+													</p:gmap>
+
+
+
+
+												</div>
+
+
+
+											</div>
+										</div>
+
+										<div class="tab-pane" id="tab_003">
+											<div class="form-body">
+												<div class="ui-g-12">
+													<p:outputLabel value="RG" />
+													<br />
+
+
+													<p:inputText value="#{alunoBean.alunoEdicao.rg}" />
+
+												</div>
+												<div class="ui-g-12">
+													<p:outputLabel value="CPF" />
+													<br />
+													<p:inputMask mask="999.999.999-99"
+														value="#{alunoBean.alunoEdicao.cpf}" />
+
+												</div>
+
+
+											</div>
+										</div>
+										<div class="tab-pane" id="tab_004">
+											<div class="form-body">
+												<div class="ui-g-12">
+													<p:outputLabel value="Servicos" />
+
+													<p:selectOneMenu styleClass="form-control select2"
+														style="width:500px" filter="true"
+														value="#{alunoBean.alunoEdicao.servico}">
+														<f:selectItem itemLabel="Selecione um Serviço" />
+														<f:selectItems value="#{alunoBean.listaServicos}"
+															var="var" itemLabel="#{var.descricao}" itemValue="#{var}" />
+													</p:selectOneMenu>
+
+												</div>
+											</div>
+										</div>
+
+										<div class="tab-pane" id="tab_005">
+											<div class="form-body">
+												<div class="ui-g-8 ui-g-nopad">
+													<div class="ui-g-6">
+														<p:outputLabel value="Telefone:" />
+														<br />
+														<p:inputMask mask="(99) 99999 - 9999"
+															value="#{alunoBean.alunoEdicao.fixo}" />
+													</div>
+													<div class="ui-g-6">
+														<p:outputLabel value="Whatsapp:" />
+														<br />
+														<p:inputMask mask="(99) 99999 - 9999"
+															value="#{alunoBean.alunoEdicao.wathsapp}" />
+													</div>
+													<div class="ui-g-12">
+														<p:outputLabel value="Email:" />
+														<br />
+														<p:inputText value="#{alunoBean.alunoEdicao.email}"
+															style="width:435px" />
+													</div>
+
+
+
+												</div>
+
+
+											</div>
+										</div>
+
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+			</p:dialog>
+
+		</h:form>
+
+		<h:form id="frmLocal" prependId="false">
+
+
+			<p:dialog header="Localização" widgetVar="local" minHeight="40"
+				modal="true" positionType="center" style="margin-top:-10px;"
+				width="900" id="dialogLocal">
+
+				<h:inputHidden id="lat" value="#{localizacaoBean.l1} " />
+
+				<h:inputHidden id="lot" value="#{localizacaoBean.l2}" />
+
+				<h:inputHidden id="foto" value="#{localizacaoBean.foto}" />
+
+				<hr />
+
+				<p:gmap onPointClick="handlePointClick(event);" id="mapa"
+					center="-2.5364511, -44.209602" zoom="15" type="ROADMAP"
+					model="#{localizacaoBean.draggableModel}"
+					style="width:100%;height:350px">
+
+
+					<p:ajax event="markerDrag" process="@this"
+						listener="#{localizacaoBean.onMarkerDrag}" update="lat lot " />
+
+
+					<p:ajax event="overlaySelect" process="@this"
+						listener="#{localizacaoBean.onMarkerSelect}" />
+
+					<p:gmapInfoWindow id="infoWindow">
+						<p:outputPanel
+							style="text-align: left;
+						       display: inline-table;
+						       width: 355px;
+						       margin: 0px;">
+
+
+							<p:graphicImage
+								value="../resources/img/#{localizacaoBean.marker.data}"
+								style="padding: 7px; width: 100px; height: 100px;" />
+
+							<div
+								style="color: #666; float: right; width: 205px; margin-right: 32px; margin-top: 10px">
+								<h:outputText value="#{localizacaoBean.marker.shadow}" />
+							</div>
+						</p:outputPanel>
+
+					</p:gmapInfoWindow>
+
+				</p:gmap>
+
+
+
+
+
+			</p:dialog>
+
+		</h:form>
+
+		<h:form>
+			<p:confirmDialog global="true">
+
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no btn btn-sm red" icon="fa fa-times" />
+
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes btn btn-sm default"
+					icon="fa fa-check" />
+			</p:confirmDialog>
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,201 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui"
+	template="/templates/Layout.xhtml">
+
+	<ui:define name="content">
+
+		<h:form id="frm" prependId="false">
+
+			<h:inputHidden id="id" readonly="true" />
+
+
+			<h3 class="page-title">
+				<i class="fa fa-gg" style="color: #1caf9a; font-size: 23px" />
+				Lista de Alunos Agendados
+			</h3>
+
+			<div class="clearfix"></div>
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+
+					<div class="portlet light ">
+						<div class="portlet-title">
+
+							<p:messages id="msgs" closable="true">
+								<p:effect type="pulsate" event="load" delay="500" />
+							</p:messages>
+
+
+
+							<div class="portlet">
+								<div class="portlet-title">
+
+
+									<p:toolbar id="toolbar"
+										style="margin-top: 20px; background-color:#fff;">
+										<p:toolbarGroup align="left">
+
+
+											<p:button ajax="false" value="Voltar"
+												icon="fa fa-arrow-circle-left" id="btn1"
+												styleClass="btn blue-madison" outcome="../aluno/AlunoTrafego.xhtml" />
+
+
+										</p:toolbarGroup>
+
+										<p:toolbarGroup align="right">
+
+
+											<p:button ajax="false" icon="fa fa-print" value="imprimir"
+												styleClass="btn btn-sm green" />
+
+										</p:toolbarGroup>
+
+									</p:toolbar>
+
+								</div>
+							</div>
+
+
+
+
+							<p:dataTable value="#{cadastroAgendaAlunoBean.listarAlunosAgenda}"
+								var="agenda" widgetVar="cadAgendaTable" reflow="true"
+								emptyMessage="Nenhum Arquivo Cadastrado...." rows="10"
+								paginator="true" paginatorPosition="bottom"
+								style="margin-top: 10px" id="cadAgenda"
+								selection="#{cadastroAgendaBean.cadastroAgendaSelecionada}"
+								selectionMode="single" rowKey="#{agenda.id}">
+
+								<f:facet name="header">
+									<p:outputPanel>
+										<p:spacer style="margin:15px 0px;" />
+
+										<p:inputText id="globalFilter" style="width:350px"
+											onkeyup="PF('cadAgendaTable').filter()"
+											placeholder="Pesquisar" />
+									</p:outputPanel>
+								</f:facet>
+
+								<p:ajax event="rowSelect" update=":frm:toolbar" />
+								<p:ajax event="rowUnselect" update=":frm:toolbar" />
+								
+									<p:column headerText="Data" style="width:10px"
+									filterBy="#{agenda.inicio}">
+									<i class="fa fa-calendar-check-o" style="color: #32aba3" />
+									<p:spacer style="width:5px;" />
+									<h:outputText value="#{agenda.inicio}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputText>
+								</p:column>
+
+
+
+								<p:column headerText="Inicio" style="width:10px"
+								
+									filterBy="#{agenda.inicio}">
+									<i class="fa fa-clock-o" style="color: #32aba3;" />
+									<p:spacer style="width:5px;" />
+
+									<h:outputText value="#{agenda.inicio}">
+										<f:convertDateTime pattern="HH:mm" />
+									</h:outputText>
+
+
+								</p:column>
+
+
+								<p:column headerText="Fim" style="width:10px"
+									filterBy="#{agenda.fim}">
+									<i class="fa fa-clock-o" style="color: #32aba3;" />
+									<p:spacer style="width:5px;" />
+									<h:outputText value="#{agenda.fim}">
+										<f:convertDateTime pattern="HH:mm" />
+									</h:outputText>
+
+								</p:column>
+								
+								<p:column headerText="Instrutor" style="width:45px"
+									filterBy="#{agenda.cadastroAgenda.instrutor.nome}">
+									<i class="fa fa-shield" style="color: #32aba3;" />
+									<p:spacer style="width:5px;" />
+									<h:outputText value="#{agenda.cadastroAgenda.instrutor.nome}" />
+
+								</p:column>
+								
+								<p:column headerText="Aluno" style="width:5px"
+									filterBy="#{agenda.cadastroAgenda.aluno.nome}">
+									<i class="fa fa-user" style="color: #32aba3;" />
+									<p:spacer style="width:5px;" />
+									<h:outputText value="#{agenda.cadastroAgenda.aluno.nome}" />
+
+								</p:column>
+								
+								<p:column headerText="Veículo" style="width:25px"
+									filterBy="#{agenda.cadastroAgenda.veiculo.marca}">
+									<i class="fa fa-asterisk" style="color: #32aba3;" />
+									<p:spacer style="width:5px;" />
+									<h:outputText value="#{agenda.cadastroAgenda.veiculo.especie}" />
+
+								</p:column>
+								
+								<p:column headerText="Previsão" style="width:50px">
+								
+								<h:outputText value="Dia da avaliação..."
+										rendered="#{agenda.previsao eq '0'}"
+										styleClass="label label-sm label-info circle" />
+								
+									<h:outputText value="Um dia para avaliação..."
+										rendered="#{agenda.previsao eq '1'}"
+										styleClass="label label-sm label-primary circle" />
+
+
+									<h:outputText value="Dois dias para avaliação..."
+										rendered="#{agenda.previsao eq '2'}"
+										styleClass="label label-sm label-warning circle" />
+
+									<h:outputText value="Três dias para avaliação..."
+										style="color:#666;" rendered="#{agenda.previsao eq '3'}"
+										styleClass="label label-sm label-default circle" />
+
+									<h:outputText value="Quatro dias para avaliação..."
+										rendered="#{agenda.previsao eq '4'}"
+										styleClass="label label-sm label-success circle" />
+
+									<h:outputText value="Cinco dias para avaliação..."
+										rendered="#{agenda.previsao eq '5'}"
+										styleClass="label label-sm label-info circle" />
+
+									<h:outputText value="Aguardando..."
+										rendered="#{agenda.previsao eq '6'}"
+										styleClass="label label-sm label-primary circle" />
+
+									<h:outputText value="Data expirada..."
+										rendered="#{agenda.previsao eq '7'}"
+										styleClass="label label-sm label-danger circle" />
+								
+								
+								
+								</p:column>
+
+							</p:dataTable>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+
+
+		</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>

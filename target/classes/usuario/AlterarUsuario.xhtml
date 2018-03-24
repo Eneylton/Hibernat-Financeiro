@@ -1,0 +1,119 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui"
+	template="/templates/Layout.xhtml">
+
+
+	<ui:define name="content">
+
+		<f:metadata>
+			<o:viewParam name="usuario" value="#{cadastroUsuarioBean.usuario}" />
+		</f:metadata>
+
+		<h:form id="frm" prependId="false">
+
+			<h:inputHidden id="id" value="#{cadastroUsuarioBean.usuario.id}"
+				readonly="true" />
+
+			<h3 class="page-title">
+				<i class="fa fa-gg" /> Alterar Usuários
+			</h3>
+
+
+			<div class="clearfix"></div>
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+
+					<div class="portlet light ">
+						<div class="portlet-title">
+
+							<p:messages id="msgs" closable="true">
+								<p:effect type="pulsate" event="load" delay="500" />
+							</p:messages>
+
+
+
+							<div class="portlet">
+								<div class="portlet-title">
+
+
+									<p:toolbar id="toolbar"
+										style="margin-top: 10px; background-color:#fff;">
+
+										<p:toolbarGroup align="left">
+
+											<p:commandButton process="@this" icon="fa fa-check"
+												ajax="false" styleClass="btn btn-sm blue-hoki"
+												value="Cadastrar" update=":frm:msgs"
+												action="#{cadastroUsuarioBean.salvar}" />
+
+
+										</p:toolbarGroup>
+
+
+
+
+										<p:toolbarGroup align="right">
+
+											<p:button outcome="PesquisaUsuario.xhtml" icon="fa fa-search"
+												value="Pesquisar" styleClass="btn grey-cascade" />
+
+										</p:toolbarGroup>
+
+									</p:toolbar>
+
+								</div>
+							</div>
+
+
+							<p:panelGrid columns="2" styleClass="semBorda">
+
+								<p:outputLabel value="Login" />
+								<p:inputText id="login" size="30" maxlength="20"
+									styleClass="form-control"
+									value="#{cadastroUsuarioBean.usuario.login}" required="true" />
+
+
+
+								<p:outputLabel value="Nome Completo" />
+								<p:inputText id="nomeCompleto" size="50" maxlength="255"
+									styleClass="form-control"
+									value="#{cadastroUsuarioBean.usuario.nomeCompleto}"
+									required="true" />
+
+
+								<p:outputLabel value="Admin" />
+								<p:selectOneRadio id="admin"
+									value="#{cadastroUsuarioBean.usuario.admin}" styleClass="radio"
+									required="true">
+									<f:selectItem itemLabel="Sim" itemValue="S" />
+									<f:selectItem itemLabel="Não" itemValue="N" />
+								</p:selectOneRadio>
+
+								<p:outputLabel value="Situação" />
+
+								<p:selectOneRadio id="situacao"
+									value="#{cadastroUsuarioBean.usuario.situacao}"
+									styleClass="radio" required="true">
+									<f:selectItem itemLabel="Ativo" itemValue="A" />
+									<f:selectItem itemLabel="Inativo" itemValue="I" />
+								</p:selectOneRadio>
+
+								
+
+							</p:panelGrid>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

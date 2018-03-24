@@ -1,0 +1,113 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui"
+	template="/templates/Layout.xhtml">
+
+
+	<ui:define name="content">
+
+		<f:metadata>
+			<o:viewParam name="licitacao" value="#{alterarUsuarioBean.usuario}" />
+		</f:metadata>
+
+		<h:form id="frm" prependId="false">
+
+
+
+			<h3 class="page-title">
+				<i class="fa fa-gg" /> Alterar Senha
+			</h3>
+
+
+			<div class="clearfix"></div>
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+
+					<div class="portlet light ">
+						<div class="portlet-title">
+
+							<p:messages id="msgs" closable="true">
+								<p:effect type="pulsate" event="load" delay="500" />
+							</p:messages>
+
+
+
+							<div class="portlet">
+								<div class="portlet-title">
+
+
+									<p:toolbar id="toolbar"
+										style="margin-top: 10px; background-color:#fff;">
+
+										<p:toolbarGroup align="left">
+
+											<p:commandButton process="@this" icon="fa fa-check"
+												ajax="false" styleClass="btn btn-sm blue-hoki"
+												value="Cadastrar" update=":frm:msgs"
+												action="#{alterarUsuarioBean.salvar}" />
+
+
+										</p:toolbarGroup>
+
+
+
+
+										<p:toolbarGroup align="right">
+
+											<p:button outcome="PesquisaUsuario.xhtml" icon="fa fa-search"
+												value="Pesquisar" styleClass="btn grey-cascade" />
+
+										</p:toolbarGroup>
+
+									</p:toolbar>
+
+								</div>
+							</div>
+
+
+							<p:panelGrid columns="2" styleClass="semBorda">
+
+								<p:outputLabel value="Login" />
+								<p:inputText id="login" size="30" maxlength="20"
+									styleClass="form-control"
+									value="#{alterarUsuarioBean.usuario.login}" required="true" />
+
+
+
+								<p:outputLabel value="Senha Atual" />
+								<p:inputText id="nomeCompleto" size="50" maxlength="255"
+									styleClass="form-control"
+									value="#{alterarUsuarioBean.usuario.senhaAtual}"
+									required="true" />
+
+
+
+								<p:outputLabel value="Nova Senha" />
+								<p:password id="novaSenha" size="20" styleClass="form-control"
+									value="#{alterarUsuarioBean.usuario.novaSenha}" match="senha2"
+									required="true" validatorMessage="Senha não confere"
+									requiredMessage="Nova Senha deve ser informada" />
+
+								<p:outputLabel value="Confirmar Senha" />
+								<p:password id="senha2" size="20" label="Confirmar Senha"
+									styleClass="form-control" required="true"
+									requiredMessage="Confirmar senha deve ser informada" />
+
+
+
+							</p:panelGrid>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

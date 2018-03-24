@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf15159714589030" configfile="/Hibernat-Agendamento/src/main/webapp/WEB-INF/faces-config.xml">
+  <nodes xsi:type="pageflow:PFPage" name="*" id="pf15159715340794" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf15159715340795" path="*"/>
+  <nodes xsi:type="pageflow:PFPage" name="Home.xhtml" id="pf15159715340806" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" inlinks="pf15159715340795" path="Home.xhtml"/>
+  <links id="pf15159715340795" target="pf15159715340806" source="pf15159715340794" outcome="Home"/>
+</pageflow:Pageflow>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+
+</h:head>
+<h:body>
+
+	<h:form>
+		<p:dataTable id="tab" var="agenda"
+			value="#{pesquisaAgendaBean.agendas}" sexotorPosition="bottom"
+			sexotor="true" rows="12">
+			
+			<p:column headerText="Código">
+				<h:outputText value="#{agenda.id}" />
+			</p:column>
+
+
+			<p:column headerText="Titulo">
+				<h:outputText value="#{agenda.descricao}" />
+			</p:column>
+			
+			
+			<p:column headerText="Status">
+				<h:outputText value="Aula Realizada !!!"
+				rendered="#{agenda.dia eq 'Aula Realizada !!!'}" style="color:#4caf50" />
+				
+				<h:outputText value="Aguardando....."
+				rendered="#{agenda.dia eq 'Aguardando.....'}" style="color:#3f51b5" />
+				
+			</p:column>
+			
+			<p:column headerText="Prvisão">
+				<h:outputText value="Dia da avaliação..."
+				rendered="#{agenda.previsao eq '0'}" style="color:#4682B4" />
+				
+				<h:outputText value="Falta um dia para avaliação..."
+				rendered="#{agenda.previsao eq '1'}" style="color:#009ACD" />
+				
+				<h:outputText value="Dois dias para avaliação..."
+				rendered="#{agenda.previsao eq '2'}" style="color:#FF8C00" />
+				
+				<h:outputText value="Três dias para avaliação..."
+				rendered="#{agenda.previsao eq '3'}" style="color:#32CD32" />
+				
+				<h:outputText value="Quatro dias para avaliação..."
+				rendered="#{agenda.previsao eq '4'}" style="color:#FF00FF" />
+				
+				<h:outputText value="Cinco dias para avaliação..."
+				rendered="#{agenda.previsao eq '5'}" style="color:#6C7B8B" />
+				
+				<h:outputText value="Prazo Inspirado..."
+				rendered="#{agenda.previsao eq '6'}" style="color:#ff0000" />
+				
+			</p:column>
+			
+			
+
+		</p:dataTable>
+
+
+	</h:form>
+</h:body>
+</html>

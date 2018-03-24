@@ -1,0 +1,201 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui"
+	template="/templates/Layout.xhtml">
+
+	<f:metadata>
+		<o:viewParam name="aluno" value="#{alunoBean.aluno}" />
+	</f:metadata>
+
+
+	<ui:define name="content">
+
+		<h:form id="frm" prependId="false">
+
+			<h:inputHidden id="id" readonly="true" />
+
+
+			<h3 class="page-title">
+				<i class="fa fa-gg" style="color: #1caf9a; font-size: 23px" />
+				Selecione um Instrutor e veículo
+			</h3>
+
+			<div class="clearfix"></div>
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+
+					<div class="portlet light ">
+						<div class="portlet-title">
+
+							<p:messages id="msgs" closable="true">
+								<p:effect type="pulsate" event="load" delay="500" />
+							</p:messages>
+
+
+
+							<div class="portlet">
+								<div class="portlet-title">
+
+
+									<p:toolbar id="toolbar"
+										style="margin-top: 20px; background-color:#fff;">
+										<p:toolbarGroup align="left">
+
+
+											<p:commandButton ajax="false" value="Cadastrar"
+												icon="fa fa-plus" id="btn1" styleClass="btn blue-madison"
+												process="@this"
+												actionListener="#{cadastroAgendaBean.salvar}"
+												action="Aluno.xhtml?faces-redirect=true"
+												update=":frm:cadAgenda :frm:msgs" />
+
+
+										</p:toolbarGroup>
+
+										<p:toolbarGroup align="right">
+
+
+											<p:button ajax="false" icon="fa fa-list" value="Lista de Agendamento"
+												styleClass="btn btn-sm green"
+												
+												outcome="../mapa/Mapa.xhtml" />
+
+										</p:toolbarGroup>
+
+									</p:toolbar>
+
+								</div>
+							</div>
+
+							<p:panelGrid columns="4" styleClass="semBorda">
+
+								<p:outputLabel value="Instrutor" />
+
+								<p:selectOneMenu required="true" id="instrutor"
+									styleClass="form-control select2"
+									value="#{cadastroAgendaBean.cadastroAgenda.instrutor}">
+									<f:selectItem itemLabel="Selecione um Instrutor" />
+									<f:selectItems value="#{cadastroAgendaBean.listarInstrutor}"
+										var="var" itemLabel="#{var.nome}" itemValue="#{var}" />
+
+									<p:ajax listener="#{cadastroAgendaBean.buscarVeiculo}"
+										update=":frm:veiculo" />
+
+								</p:selectOneMenu>
+
+
+
+								<p:outputLabel value="Veiculo" />
+
+								<p:selectOneMenu var="vei" id="veiculo"
+									styleClass="select2-drop-mask" style="width:300px"
+									value="#{cadastroAgendaBean.cadastroAgenda.veiculo}">
+									<f:selectItem itemLabel="Selecione uma Veículo" />
+									<f:selectItems value="#{cadastroAgendaBean.listarVeiculos}"
+										var="var" itemLabel="#{var.marca}" itemValue="#{var}" />
+
+									<p:column headerText="logo">
+										<p:graphicImage value="../resources/img/#{vei.foto}"
+											style="width: 130px; height: 90px;" />
+									</p:column>
+
+
+									<p:column headerText="Veículos">
+                     										  #{vei.marca} 
+                           								</p:column>
+
+								</p:selectOneMenu>
+
+							</p:panelGrid>
+
+							<hr />
+
+							<p:dataTable value="#{cadastroAgendaBean.listarAlunosAgenda}"
+								var="agenda" widgetVar="cadAgendaTable" reflow="true"
+								emptyMessage="Nenhum Arquivo Cadastrado...." rows="10"
+								paginator="true" paginatorPosition="bottom"
+								style="margin-top: 10px" id="cadAgenda"
+								selection="#{cadastroAgendaBean.cadastroAgendaSelecionada}"
+								selectionMode="single" rowKey="#{agenda.id}">
+
+								<f:facet name="header">
+									<p:outputPanel>
+										<p:spacer style="margin:15px 0px;" />
+
+										<p:inputText id="globalFilter" style="width:350px"
+											onkeyup="PF('cadAgendaTable').filter()"
+											placeholder="Pesquisar" />
+									</p:outputPanel>
+								</f:facet>
+
+								<p:ajax event="rowSelect" update=":frm:toolbar" />
+								<p:ajax event="rowUnselect" update=":frm:toolbar" />
+
+								<p:column headerText="Código"
+									style="width:50px; text-align:center;">
+									<i class="fa fa-circle-o text-blue"></i>
+									<p:spacer style="width:10px;" />
+									<h:outputText value="#{agenda.id}" />
+								</p:column>
+								
+								
+								<p:column style="width:200px; text-align:left;"
+									headerText="Alunos" priority="4" filterBy="#{agenda.aluno.nome}">
+									<i class="fa  fa-user" style="color:#26a69a" />
+									<p:spacer style="width:10px;" />
+									<h:outputText value="#{agenda.aluno.nome}" />
+								</p:column>
+								
+								
+								<p:column style="width:200px; text-align:left;"
+									headerText="Instrutor" priority="4" filterBy="#{agenda.instrutor.nome}">
+									<i class="fa  fa-check" style="color:#26a69a" />
+									<p:spacer style="width:10px;" />
+									<h:outputText value="#{agenda.instrutor.nome}" />
+								</p:column>
+								
+								<p:column style="width:200px; text-align:left;"
+									headerText="Alunos" priority="4" filterBy="#{agenda.veiculo.especie}">
+									<i class="fa  fa-car" style="color:#26a69a" />
+									<p:spacer style="width:10px;" />
+									<h:outputText value="#{agenda.veiculo.especie}" />
+								</p:column>
+								
+								
+								
+								<p:column style="width:50px; text-align:center;"
+									headerText="Agenda">
+
+									<p:button styleClass="btn btn-sm red intense" type="button"
+										icon="fa fa-calendar" title="Teste Avaliação"
+										outcome="../agenda/Agendamento.xhtml">
+
+										<f:param name="agenda" value="#{agenda.id}" />
+
+									</p:button>
+									
+									
+
+								</p:column>
+								
+							
+							</p:dataTable>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+
+
+		</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>

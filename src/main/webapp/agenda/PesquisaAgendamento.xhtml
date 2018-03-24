@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+
+</h:head>
+<h:body>
+
+	<h:form>
+		<p:dataTable id="tab" var="agenda"
+			value="#{pesquisaAgendaBean.agendas}" sexotorPosition="bottom"
+			sexotor="true" rows="12">
+
+			<p:column headerText="Código" style="width:80px; text-align:center;">
+				<h:outputText value="#{agenda.id}" />
+			</p:column>
+
+			<p:column headerText="Titulo">
+				<h:outputText value="#{agenda.titulo}" />
+			</p:column>
+
+			<p:column headerText="Inicio">
+
+				<h:outputText value="#{agenda.inicio}">
+					<f:convertDateTime pattern="dd/MM/yyyy HH:mm"
+						timeZone="America/Sao_Paulo" />
+				</h:outputText>
+
+
+			</p:column>
+
+
+			<p:column headerText="Fim">
+				<h:outputText value="#{agenda.fim}">
+					<f:convertDateTime pattern="dd/MM/yyyy HH:mm"
+						timeZone="America/Sao_Paulo" />
+				</h:outputText>
+
+			</p:column>
+
+
+
+			<p:column headerText="status">
+
+				<h:outputText value="Falso" rendered="#{agenda.status eq 'false'}" />
+				<h:outputText value="Vedadeiro" rendered="#{agenda.status eq 'true'}" />
+
+			</p:column>
+
+
+		</p:dataTable>
+
+
+	</h:form>
+</h:body>
+</html>

@@ -1,0 +1,173 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui"
+	template="/templates/LayoutCalendar.xhtml">
+
+	<f:metadata>
+		<o:viewParam name="aluno" value="#{alunoBean.aluno}" />
+
+	</f:metadata>
+
+
+
+	<ui:define name="content">
+
+		<h:form id="frm" prependId="false">
+
+			<h:inputHidden id="id" readonly="true"
+				value="#{simuladorBean.agenda.id}" />
+
+
+			<h3 class="page-title">
+				<i class="fa fa-gg" style="color: #1caf9a; font-size: 23px" />
+				Agendar aulas para o simulador automotivo
+			</h3>
+
+			<div class="clearfix"></div>
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+
+					<div class="portlet light ">
+						<div class="portlet-title">
+
+							<p:messages id="messages" closable="true">
+								<p:effect type="pulsate" event="load" delay="500" />
+							</p:messages>
+
+
+
+							<div class="portlet">
+								<div class="portlet-title">
+
+
+									<p:toolbar id="toolbar"
+										style="margin-top: 20px; background-color:#fff;">
+										<p:toolbarGroup align="left">
+
+
+											<i class="icon-settings font-red-sunglo"
+												style="font-size: 13px"></i>
+											<span class="caption-subject bold uppercase"> <span
+												style="font-size: 14px">Aluno:</span> <span
+												style="font-size: 14px; color: #26a69a">
+													#{alunoBean.aluno.nome} </span>
+											</span>
+											<p:spacer style="margin-left:10px;" />
+
+
+										</p:toolbarGroup>
+
+										<p:toolbarGroup align="right">
+
+
+											<p:button ajax="false" icon="fa fa-calendar-plus-o"
+												immediate="true" process="@this" value="Novo agendamento"
+												styleClass="btn btn-sm red-intense"
+												outcome="../aluno/AlunoSimulador.xhtml" />
+
+										</p:toolbarGroup>
+
+									</p:toolbar>
+
+								</div>
+							</div>
+
+
+							<p:schedule value="#{simuladorBean.agendaCalendario}" locale="pt"
+								axisFormat="HH:mm" timeFormat="HH:mm" allDaySlot="false"
+								ignoreTimezone="false" slotMinutes="10" view="agendaWeek"
+								minTime="07:00:00" maxTime="18:10:00" id="schEvento"
+								widgetVar="modal" timeZone="America/Sao_Paulo">
+								<p:ajax event="eventSelect"
+									listener="#{simuladorBean.quandoSelecionado}"
+									update="eventoDetalhe" oncomplete="PF('caixaDialog').show();" />
+
+								<p:ajax event="dateSelect"
+									listener="#{simuladorBean.quandoNovo}" update="eventoDetalhe"
+									oncomplete="PF('caixaDialog').show();" />
+
+								<p:ajax event="eventMove"
+									listener="#{simuladorBean.quandoMovido}" update="schEvento" />
+
+								<p:ajax event="eventResize"
+									listener="#{simuladorBean.quandoRedimencionado}"
+									update="schEvento" />
+
+
+
+							</p:schedule>
+
+							<p:dialog widgetVar="caixaDialog" header="Agendar" width="500px"
+								resizable="false" positionType="center" modal="true"
+								showEffect="Scale">
+								<hr />
+								<p:outputPanel id="eventoDetalhe">
+
+									<h:inputHidden value="#{simuladorBean.agenda.titulo}"
+										style="width:100%" />
+
+									<div class="col-md-6">
+										<div class="form-group">
+											<label class="control-label">Inicio</label><br />
+											<p:calendar value="#{simuladorBean.agenda.inicio}"
+												showOn="button" pattern="dd/MM/yyyy - HH:mm" minHour="7"
+												maxHour="18" maxMinute="30" />
+
+										</div>
+
+										<div class="form-group">
+											<label class="control-label">Confirmar aula prática</label> <br />
+											<p:selectBooleanCheckbox
+												value="#{simuladorBean.agenda.status}" />
+										</div>
+
+									</div>
+
+									<div class="col-md-6">
+
+										<div class="form-group">
+											<label class="control-label">Fim</label><br />
+											<p:calendar value="#{simuladorBean.agenda.fim}"
+												showOn="button" pattern="dd/MM/yyyy - HH:mm" minHour="7"
+												maxHour="18" maxMinute="30" />
+
+										</div>
+
+
+										<div class="form-group">
+											<label class="control-label">Descrição</label><br />
+
+											<p:inputTextarea cols="27"
+												value="#{simuladorBean.agenda.descricao}" autoResize="true" />
+
+										</div>
+
+									</div>
+								</p:outputPanel>
+								<div class="col-md-6">
+
+									<div class="form-group">
+
+										<p:commandButton actionListener="#{simuladorBean.salvar}"
+											icon="fa fa-check" styleClass="btn btn-sm blue-hoki"
+											value="Salvar" update="messages schEvento"
+											oncomplete="PF('caixaDialog').hide();" />
+									</div>
+								</div>
+
+							</p:dialog>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>

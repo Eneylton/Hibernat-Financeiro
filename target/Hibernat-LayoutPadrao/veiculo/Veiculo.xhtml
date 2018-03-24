@@ -1,0 +1,238 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui"
+	template="/templates/Layout.xhtml">
+
+	<ui:define name="content">
+
+		<h:form id="frm" prependId="false" enctype="multipart/form-data">
+
+			<h:inputHidden id="id" value="#{veiculoBean.veiculo.id}"
+				readonly="true" />
+
+
+			<h3 class="page-title">
+				<i class="fa fa-gg" style="color: #1caf9a; font-size: 23px" />
+				veiculo
+			</h3>
+
+			<div class="clearfix"></div>
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+
+					<div class="portlet light ">
+						<div class="portlet-title">
+
+							<p:messages id="msgs" closable="true">
+								<p:effect type="pulsate" event="load" delay="500" />
+							</p:messages>
+
+
+
+							<div class="portlet">
+								<div class="portlet-title">
+
+
+									<p:toolbar id="toolbar"
+										style="margin-top: 20px; background-color:#fff;">
+										<p:toolbarGroup align="left">
+
+											<p:commandButton value="Novo" icon="fa fa-plus" id="btn1"
+												styleClass="btn blue-madison"
+												action="#{veiculoBean.prepararNovoCadastro}" process="@this"
+												update="formulario-dialog"
+												oncomplete="PF('edicaoDialog').show()">
+
+
+												<p:resetInput target="formulario-dialog" />
+
+
+											</p:commandButton>
+
+
+											<span class="ui-separator"> <span
+												class="ui-icon ui-icon-grip-dotted-vertical" />
+											</span>
+
+
+											<p:commandButton icon="fa fa-pencil" title="Editar"
+												value="Editar" styleClass="btn blue-hoki" id="btn2"
+												process="@this" update="formulario-dialog"
+												oncomplete="PF('edicaoDialog').show()"
+												disabled="#{veiculoBean.veiculoSelecionada == null}">
+
+
+												<p:resetInput target="formulario-dialog" />
+
+												<f:setPropertyActionListener
+													value="#{veiculoBean.veiculoSelecionada}"
+													target="#{veiculoBean.veiculoEdicao}" />
+											</p:commandButton>
+
+
+											<p:spacer style="margin-left:10px" />
+
+											<p:commandButton icon="fa fa-trash" title="Excluir"
+												value="Excluir" id="btn3" process="@this"
+												styleClass="btn red-sunglo"
+												update=":frm:veiculoTable :frm:msgs :frm:toolbar"
+												action="#{veiculoBean.excluir}"
+												disabled="#{veiculoBean.veiculoSelecionada == null}">
+
+
+
+												<p:confirm icon="ui-icon-alert"
+													header="Confirmação de exclusão"
+													message="Tem Certeza que Deseja Excluir esse veiculo ?" />
+
+											</p:commandButton>
+
+										</p:toolbarGroup>
+
+									</p:toolbar>
+
+								</div>
+							</div>
+
+
+							<p:dataTable value="#{veiculoBean.listarVeiculos}" var="veiculo"
+								widgetVar="veiculoTable" reflow="true"
+								emptyMessage="Nenhum Arquivo Cadastrado...." rows="10"
+								paginator="true" paginatorPosition="bottom"
+								style="margin-top: 10px" id="veiculoTable"
+								selection="#{veiculoBean.veiculoSelecionada}"
+								selectionMode="single" rowKey="#{veiculo.id}">
+
+								<f:facet name="header">
+									<p:outputPanel>
+										<p:spacer style="margin:15px 0px;" />
+
+										<p:inputText id="globalFilter" style="width:350px"
+											onkeyup="PF('veiculoTable').filter()" placeholder="Pesquisar" />
+									</p:outputPanel>
+								</f:facet>
+
+								<p:ajax event="rowSelect" update=":frm:toolbar" />
+								<p:ajax event="rowUnselect" update=":frm:toolbar" />
+
+								<p:column headerText="Código"
+									style="width:50px; text-align:center;">
+									<i class="fa fa-circle-o text-blue"></i>
+									<p:spacer style="width:10px;" />
+									<h:outputText value="#{veiculo.id}" />
+								</p:column>
+
+								<p:column style="width:200px; text-align:left;"
+									headerText="Veiculos" priority="4" filterBy="#{veiculo.marca}">
+									<i class="fa  fa-user" style="color: #3c8dbc" />
+									<p:spacer style="width:10px;" />
+									<h:outputText value="#{veiculo.marca}" />
+								</p:column>
+
+							</p:dataTable>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<p:dialog header="Novo veiculo" widgetVar="edicaoDialog"
+				styleClass="modal-header" showEffect="explode" hideEffect="explode"
+				id="formulario-dialog" resizable="false" modal="true"
+				closeOnEscape="true">
+
+				<p:messages id="msgs-dialog" closable="true">
+					<p:effect type="pulsate" event="load" delay="500" />
+				</p:messages>
+				<p:defaultCommand target="salvar-button" scope="formulario-dialog" />
+
+				<hr />
+
+				<p:panelGrid columns="1" styleClass="semBorda" id="painel-dialog">
+
+
+					<p:outputLabel value="Veículo" />
+
+					<p:inputText id="serv" maxlength="80" style="width:250px"
+						styleClass="form-control"
+						value="#{veiculoBean.veiculoEdicao.marca}" required="true" />
+
+
+					<p:outputLabel value="Especie" />
+
+					<p:selectOneMenu id="espec" value="#{veiculoBean.veiculoEdicao.especie}"
+						style="width:125px">
+						<f:selectItem itemLabel="Selecione a especie" itemValue="" />
+						<f:selectItem itemLabel="Automovel" itemValue="Automovel" />
+						<f:selectItem itemLabel="Moto" itemValue="Moto" />
+						<f:selectItem itemLabel="Microonibus" itemValue="Microonibus" />
+						<f:selectItem itemLabel="Caminhao" itemValue="Caminhao" />
+					</p:selectOneMenu>
+
+
+					<p:outputLabel value="Instrutor:" style="text-align:right" />
+
+					<p:selectOneMenu id="idInst" style="width:250px;" filter="true"
+						converter="omnifaces.SelectItemsConverter"
+						value="#{veiculoBean.veiculoEdicao.instrutor}">
+						<f:selectItem itemLabel="Selcione um Instrutor" />
+						<f:selectItems value="#{veiculoBean.listarInstrutor}" var="var"
+							itemLabel="#{var.nome}" itemValue="#{var}" />
+
+
+					</p:selectOneMenu>
+
+
+
+
+				</p:panelGrid>
+
+				<hr />
+
+				<div class="fileinput fileinput-new" data-provides="fileinput">
+					<p:outputLabel value="Imagem" />
+					<p:fileUpload styleClass="btn default btn-file" style="width:100%"
+						fileUploadListener="#{veiculoBean.handleFileUpload}"
+						cancelLabel="Cancelar" label="Imagem" auto="false" mode="advanced"
+						dragDropSupport="false" sizeLimit="5000000" fileLimit="1"
+						allowTypes="/(\.|\/)(jpg|png)$/" />
+
+				</div>
+
+				<br />
+
+
+				<p:commandButton value="Salvar" id="salvar-button"
+					icon="fa fa-check" action="#{veiculoBean.salvar}"
+					styleClass="btn blue" process="formulario-dialog"
+					update=":frm:veiculoTable :frm:msgs"
+					oncomplete="if (!args.validationFailed) PF('edicaoDialog').hide()" />
+
+
+
+
+
+			</p:dialog>
+
+
+		</h:form>
+
+		<h:form>
+			<p:confirmDialog global="true">
+
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no btn btn-sm red" icon="fa fa-times" />
+
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes btn btn-sm default"
+					icon="fa fa-check" />
+			</p:confirmDialog>
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

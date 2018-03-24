@@ -1,0 +1,215 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui"
+	template="/templates/Layout.xhtml">
+
+	<ui:define name="content">
+
+		<h:form id="frm" prependId="false">
+
+			<h:inputHidden id="id" value="#{servicoBean.servico.id}"
+				readonly="true" />
+
+
+			<h3 class="page-title">
+				<i class="fa fa-gg" style="color: #1caf9a; font-size: 23px" />
+				Servico
+			</h3>
+
+			<div class="clearfix"></div>
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+
+					<div class="portlet light ">
+						<div class="portlet-title">
+
+							<p:messages id="msgs" closable="true">
+								<p:effect type="pulsate" event="load" delay="500" />
+							</p:messages>
+
+
+
+							<div class="portlet">
+								<div class="portlet-title">
+
+
+									<p:toolbar id="toolbar"
+										style="margin-top: 20px; background-color:#fff;">
+										<p:toolbarGroup align="left">
+
+											<p:commandButton value="Novo" icon="fa fa-plus" id="btn1"
+												styleClass="btn blue-madison"
+												action="#{servicoBean.prepararNovoCadastro}" process="@this"
+												update="formulario-dialog"
+												oncomplete="PF('edicaoDialog').show()">
+
+
+												<p:resetInput target="formulario-dialog" />
+
+
+											</p:commandButton>
+
+
+											<span class="ui-separator"> <span
+												class="ui-icon ui-icon-grip-dotted-vertical" />
+											</span>
+
+
+											<p:commandButton icon="fa fa-pencil" title="Editar"
+												value="Editar" styleClass="btn blue-hoki" id="btn2"
+												process="@this" update="formulario-dialog"
+												oncomplete="PF('edicaoDialog').show()"
+												disabled="#{servicoBean.servicoSelecionada == null}">
+
+
+												<p:resetInput target="formulario-dialog" />
+
+												<f:setPropertyActionListener
+													value="#{servicoBean.servicoSelecionada}"
+													target="#{servicoBean.servicoEdicao}" />
+											</p:commandButton>
+
+
+											<p:spacer style="margin-left:10px" />
+
+											<p:commandButton icon="fa fa-trash" title="Excluir"
+												value="Excluir" id="btn3" process="@this"
+												styleClass="btn red-sunglo"
+												update=":frm:servicoTable :frm:msgs :frm:toolbar"
+												action="#{servicoBean.excluir}"
+												disabled="#{servicoBean.servicoSelecionada == null}">
+
+
+
+												<p:confirm icon="ui-icon-alert"
+													header="Confirmação de exclusão"
+													message="Tem Certeza que Deseja Excluir esse servico ?" />
+
+											</p:commandButton>
+
+										</p:toolbarGroup>
+
+									</p:toolbar>
+
+								</div>
+							</div>
+
+
+							<p:dataTable value="#{servicoBean.listarServicos}" var="servico"
+								widgetVar="servicoTable" reflow="true"
+								emptyMessage="Nenhum Arquivo Cadastrado...." rows="10"
+								paginator="true" paginatorPosition="bottom"
+								style="margin-top: 10px" id="servicoTable"
+								selection="#{servicoBean.servicoSelecionada}"
+								selectionMode="single" rowKey="#{servico.id}">
+
+								<f:facet name="header">
+									<p:outputPanel>
+										<p:spacer style="margin:15px 0px;" />
+
+										<p:inputText id="globalFilter" style="width:350px"
+											onkeyup="PF('servicoTable').filter()" placeholder="Pesquisar" />
+									</p:outputPanel>
+								</f:facet>
+
+								<p:ajax event="rowSelect" update=":frm:toolbar" />
+								<p:ajax event="rowUnselect" update=":frm:toolbar" />
+
+								<p:column headerText="Código"
+									style="width:50px; text-align:center;">
+									<i class="fa fa-circle-o text-blue"></i>
+									<p:spacer style="width:10px;" />
+									<h:outputText value="#{servico.id}" />
+								</p:column>
+
+								<p:column style="width:200px; text-align:left;"
+									headerText="Serviços" priority="4"
+									filterBy="#{servico.descricao}">
+									<i class="fa  fa-user" style="color: #3c8dbc" />
+									<p:spacer style="width:10px;" />
+									<h:outputText value="#{servico.descricao}" />
+								</p:column>
+
+								<p:column style="width:200px; text-align:left;"
+									headerText="Valor" priority="4" filterBy="#{servico.valor}">
+									<i class="fa fa-dollar" style="color: #3c8dbc" />
+									<p:spacer style="width:10px;" />
+									<h:outputText value="#{servico.valor}">
+										<f:convertNumber type="currency" />
+									</h:outputText>
+								</p:column>
+
+							</p:dataTable>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<p:dialog header="Novo Serviço" widgetVar="edicaoDialog"
+				styleClass="modal-header" showEffect="explode" hideEffect="explode"
+				id="formulario-dialog" resizable="false" modal="true"
+				closeOnEscape="true">
+
+				<p:messages id="msgs-dialog" closable="true">
+					<p:effect type="pulsate" event="load" delay="500" />
+				</p:messages>
+				<p:defaultCommand target="salvar-button" scope="formulario-dialog" />
+
+				<hr />
+
+				<p:panelGrid columns="2" styleClass="semBorda" id="painel-dialog">
+
+
+					<p:outputLabel value="Serviço" />
+
+					<p:inputText id="serv" maxlength="80" style="width:250px"
+						styleClass="form-control"
+						value="#{servicoBean.servicoEdicao.descricao}" required="true" />
+						
+						<p:outputLabel value="Valor" />
+						
+							<p:inputText id="valor"  maxlength="100" style="width:110px"
+									styleClass="form-control" onkeydown="mascara(this,moeda)"
+									value="#{servicoBean.servicoEdicao.valor}" required="true" >
+									<f:convertNumber minFractionDigits="2" maxIntegerDigits="10" />
+									
+									</p:inputText>
+
+					<br />
+
+				</p:panelGrid>
+
+				<div style="margin-left: 10px;">
+
+					<p:commandButton value="Salvar" id="salvar-button"
+						icon="fa fa-check" action="#{servicoBean.salvar}"
+						styleClass="btn blue" process="formulario-dialog"
+						update=":frm:servicoTable :frm:msgs"
+						oncomplete="if (!args.validationFailed) PF('edicaoDialog').hide()" />
+
+				</div>
+			</p:dialog>
+
+
+		</h:form>
+
+		<h:form>
+			<p:confirmDialog global="true">
+
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no btn btn-sm red" icon="fa fa-times" />
+
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes btn btn-sm default"
+					icon="fa fa-check" />
+			</p:confirmDialog>
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>
